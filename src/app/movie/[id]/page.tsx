@@ -48,7 +48,7 @@ export default function MovieDetailsPage() {
       if (data.success) {
         setSimilarMovies(
           data.data
-            .filter((m: IContent) => m._id !== excludeId)
+            .filter((m: IContent) => m._id.toString() !== excludeId.toString())
             .slice(0, 6)
         );
       }

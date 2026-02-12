@@ -160,7 +160,7 @@ export default function AdminPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/content/${selectedContent._id}`, {
+      const response = await fetch(`/api/content/${selectedContent._id.toString()}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -196,7 +196,7 @@ export default function AdminPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/content/${selectedContent._id}`, {
+      const response = await fetch(`/api/content/${selectedContent._id.toString()}`, {
         method: "DELETE",
         headers: {
           "x-admin-key": getAdminKey(),
@@ -205,7 +205,7 @@ export default function AdminPage() {
 
       const result = await response.json();
       if (result.success) {
-        dispatch(removeContent(selectedContent._id));
+        dispatch(removeContent(selectedContent._id.toString()));
         setDeleteModalOpen(false);
         setSelectedContent(null);
         alert("Content deleted successfully!");

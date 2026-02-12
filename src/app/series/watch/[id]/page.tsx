@@ -71,7 +71,7 @@ function SeriesWatchContent() {
       if (data.success) {
         setRelatedSeries(
           data.data
-            .filter((s: IContent) => s._id !== excludeId)
+            .filter((s: IContent) => s._id.toString() !== excludeId.toString())
             .slice(0, 6)
         );
       }
@@ -212,7 +212,7 @@ function SeriesWatchContent() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {relatedSeries.map((item, index) => (
                 <motion.div
-                  key={item._id}
+                  key={item._id.toString()}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}

@@ -126,7 +126,7 @@ export default function Home() {
         >
           {items.map((item, index) => (
             <motion.div
-              key={item._id}
+              key={item._id.toString()}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

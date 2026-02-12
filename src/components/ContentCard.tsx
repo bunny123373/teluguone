@@ -12,7 +12,7 @@ interface ContentCardProps {
 }
 
 export default function ContentCard({ content }: ContentCardProps) {
-  const href = content.type === "movie" ? `/movie/${content._id}` : `/series/${content._id}`;
+  const href = content.type === "movie" ? `/movie/${content._id.toString()}` : `/series/${content._id.toString()}`;
 
   return (
     <motion.div

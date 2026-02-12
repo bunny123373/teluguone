@@ -18,19 +18,19 @@ const contentSlice = createSlice({
   initialState,
   reducers: {
     setContent: (state, action: PayloadAction<IContent[]>) => {
-      state.list = action.payload;
+      state.list = action.payload as any;
     },
     addContent: (state, action: PayloadAction<IContent>) => {
-      state.list.unshift(action.payload);
+      state.list.unshift(action.payload as any);
     },
     updateContent: (state, action: PayloadAction<IContent>) => {
-      const index = state.list.findIndex((item) => item._id === action.payload._id);
+      const index = state.list.findIndex((item) => item._id.toString() === action.payload._id.toString());
       if (index !== -1) {
-        state.list[index] = action.payload;
+        state.list[index] = action.payload as any;
       }
     },
     removeContent: (state, action: PayloadAction<string>) => {
-      state.list = state.list.filter((item) => item._id !== action.payload);
+      state.list = state.list.filter((item) => item._id.toString() !== action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;

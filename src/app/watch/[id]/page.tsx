@@ -47,7 +47,7 @@ export default function WatchPage() {
       if (data.success) {
         setRelatedMovies(
           data.data
-            .filter((m: IContent) => m._id !== excludeId)
+            .filter((m: IContent) => m._id.toString() !== excludeId.toString())
             .slice(0, 6)
         );
       }
@@ -171,7 +171,7 @@ export default function WatchPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {relatedMovies.map((item, index) => (
                 <motion.div
-                  key={item._id}
+                  key={item._id.toString()}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}

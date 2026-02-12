@@ -58,7 +58,7 @@ export default function AdminContentTable({
           <tbody className="divide-y divide-border">
             {content.map((item, index) => (
               <motion.tr
-                key={item._id}
+                key={item._id.toString()}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
