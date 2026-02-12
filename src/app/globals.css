@@ -1,0 +1,573 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent flash of unstyled content */
+html {
+  visibility: hidden;
+}
+
+html.loaded {
+  visibility: visible;
+}
+
+body {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  background-color: #070A12;
+  color: #E5E7EB;
+  min-height: 100vh;
+  overflow-x: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* Instant background to prevent white flash */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #070A12;
+  z-index: -1;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF2E63;
+}
+
+/* Selection */
+::selection {
+  background: rgba(255, 46, 99, 0.3);
+  color: #E5E7EB;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Neon Glow Effects */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(255, 46, 99, 0.5);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 20px rgba(58, 134, 255, 0.5);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.5);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #FF2E63 0%, #3A86FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card Hover Effect */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Line Clamp */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Horizontal Scroll Container */
+.scroll-container {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+}
+
+.scroll-container > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Skeleton Loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #0F172A 25%,
+    #1E293B 50%,
+    #0F172A 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Focus Styles */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* Button Press Effect */
+button:active {
+  transform: scale(0.98);
+}
+
+/* Smooth Touch Interactions */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch device optimizations */
+  button, 
+  a, 
+  [role="button"],
+  .touch-target {
+    -webkit-tap-highlight-color: rgba(255, 46, 99, 0.1);
+    touch-action: manipulation;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  button:active,
+  a:active,
+  [role="button"]:active,
+  .touch-target:active {
+    transform: scale(0.96);
+    opacity: 0.8;
+    transition-duration: 0.1s;
+  }
+  
+  /* Smooth touch feedback for cards */
+  .touch-card {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .touch-card:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+.smooth-touch {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Enhanced button hover and touch states */
+.enhanced-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.enhanced-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.enhanced-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .enhanced-button:active::before {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* Smooth link animations */
+.smooth-link {
+  position: relative;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FF2E63, #3A86FF);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-link:hover::after,
+.smooth-link:focus::after {
+  width: 100%;
+}
+
+/* Ripple effect for touch feedback */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255, 46, 99, 0.2) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.5s;
+  pointer-events: none;
+}
+
+.ripple:active::before {
+  transform: translate(-50%, -50%) scale(2);
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+/* Smooth scroll behavior */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Touch-friendly sizing */
+.touch-friendly {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 24px;
+}
+
+/* Haptic feedback visual simulation */
+.haptic-pulse {
+  animation: hapticPulse 0.15s ease-out;
+}
+
+@keyframes hapticPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Enhanced touch states */
+@media (hover: none) and (pointer: coarse) {
+  .haptic-touch:active {
+    animation: hapticPulse 0.1s ease-out;
+  }
+  
+  /* Improved touch feedback for all buttons */
+  .haptic-touch {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .haptic-touch:active {
+    transform: scale(0.94);
+    opacity: 0.85;
+  }
+}
+
+/* Smooth micro-interactions */
+.micro-interaction {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.micro-interaction:hover {
+  transform: translateY(-1px);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .micro-interaction:active {
+    transform: translateY(1px);
+  }
+}
+
+/* Enhanced loading states */
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    #0F172A 25%,
+    rgba(255, 46, 99, 0.1) 50%,
+    #0F172A 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+/* Global instant loading classes */
+.instant-load {
+  opacity: 0;
+  animation: fadeInInstant 0.2s ease-out forwards;
+}
+
+@keyframes fadeInInstant {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Prevent layout shift during loading */
+.preserve-layout {
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Smooth page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* Global smooth interactions */
+.global-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Instant image loading */
+.instant-image {
+  background-color: #0F172A;
+  position: relative;
+  overflow: hidden;
+}
+
+.instant-image img {
+  transition: opacity 0.15s ease-out;
+}
+
+/* Smooth hover states for all interactive elements */
+.smooth-hover {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-hover:hover {
+  transform: translateY(-1px);
+}
+
+/* Prevent FOIT (Flash of Invisible Text) */
+.font-loading {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.font-loaded {
+  font-family: 'Inter', 'Poppins', sans-serif;
+}
+
+/* Global touch optimization */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: rgba(255, 46, 99, 0.1);
+  }
+  
+  .global-smooth:active {
+    transform: scale(0.98);
+    transition-duration: 0.1s;
+  }
+  
+  .smooth-hover:active {
+    transform: translateY(1px) scale(0.98);
+  }
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Loading skeleton animation */
+.skeleton-pulse {
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Smooth scrollbar */
+.smooth-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1E293B #0F172A;
+}
+
+.smooth-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.smooth-scrollbar::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+.smooth-scrollbar::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.smooth-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #FF2E63;
+}
+
+/* Video Player Custom Styles */
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+/* Animation Classes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Image Loading Optimization */
+img {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+}
+
+.image-container {
+  background-color: #0F172A;
+}
+
+/* Prevent layout shift during image loading */
+.aspect-preserve {
+  aspect-ratio: auto;
+}
+
+/* Smooth image transitions */
+.image-transition {
+  transition: opacity 0.3s ease-in-out;
+}

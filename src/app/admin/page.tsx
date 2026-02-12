@@ -1,0 +1,379 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Lock, Eye, EyeOff, LayoutDashboard, Film, Tv, List } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  setContent,
+  addContent,
+  updateContent,
+  removeContent,
+} from "@/redux/slices/contentSlice";
+import { IContent } from "@/models/Content";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
+import AdminLayout from "@/components/admin/AdminLayout";
+import AdminStats from "@/components/admin/AdminStats";
+import UploadMovieForm from "@/components/admin/UploadMovieForm";
+import UploadSeriesForm from "@/components/admin/UploadSeriesForm";
+import AdminContentTable from "@/components/admin/AdminContentTable";
+import EditContentModal from "@/components/admin/EditContentModal";
+import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";
+
+export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminKey, setAdminKey] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Modals
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedContent, setSelectedContent] = useState<IContent | null>(null);
+
+  const dispatch = useAppDispatch();
+  const content = useAppSelector((state) => state.content.list);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchContent();
+    }
+  }, [isAuthenticated]);
+
+  const fetchContent = async () => {
+    try {
+      const response = await fetch("/api/content");
+      const data = await response.json();
+      if (data.success) {
+        dispatch(setContent(data.data));
+      }
+    } catch (error) {
+      console.error("Error fetching content:", error);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError("");
+
+    // Validate admin key by making a test request
+    try {
+      const response = await fetch("/api/content", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": adminKey,
+        },
+        body: JSON.stringify({ test: true }),
+      });
+
+      if (response.status === 401) {
+        setLoginError("Invalid admin key");
+        return;
+      }
+
+      // Store the key for future requests
+      localStorage.setItem("adminKey", adminKey);
+      setIsAuthenticated(true);
+    } catch (error) {
+      setLoginError("An error occurred. Please try again.");
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminKey");
+    setIsAuthenticated(false);
+    setAdminKey("");
+    setActiveTab("dashboard");
+  };
+
+  const getAdminKey = () => {
+    return localStorage.getItem("adminKey") || "";
+  };
+
+  const handleUploadMovie = async (data: any) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/content", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": getAdminKey(),
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        dispatch(addContent(result.data));
+        alert("Movie uploaded successfully!");
+        setActiveTab("manage");
+      } else {
+        alert(result.error || "Failed to upload movie");
+      }
+    } catch (error) {
+      console.error("Error uploading movie:", error);
+      alert("An error occurred while uploading");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUploadSeries = async (data: any) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/content", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": getAdminKey(),
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        dispatch(addContent(result.data));
+        alert("Series uploaded successfully!");
+        setActiveTab("manage");
+      } else {
+        alert(result.error || "Failed to upload series");
+      }
+    } catch (error) {
+      console.error("Error uploading series:", error);
+      alert("An error occurred while uploading");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEdit = (item: IContent) => {
+    setSelectedContent(item);
+    setEditModalOpen(true);
+  };
+
+  const handleUpdate = async (data: any) => {
+    if (!selectedContent) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/content/${selectedContent._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": getAdminKey(),
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        dispatch(updateContent(result.data));
+        setEditModalOpen(false);
+        setSelectedContent(null);
+        alert("Content updated successfully!");
+      } else {
+        alert(result.error || "Failed to update content");
+      }
+    } catch (error) {
+      console.error("Error updating content:", error);
+      alert("An error occurred while updating");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (item: IContent) => {
+    setSelectedContent(item);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedContent) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/content/${selectedContent._id}`, {
+        method: "DELETE",
+        headers: {
+          "x-admin-key": getAdminKey(),
+        },
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        dispatch(removeContent(selectedContent._id));
+        setDeleteModalOpen(false);
+        setSelectedContent(null);
+        alert("Content deleted successfully!");
+      } else {
+        alert(result.error || "Failed to delete content");
+      }
+    } catch (error) {
+      console.error("Error deleting content:", error);
+      alert("An error occurred while deleting");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Login Screen
+  if (!isAuthenticated) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md"
+        >
+          <div className="bg-card border border-border rounded-2xl p-8">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-text mb-2">Admin Access</h1>
+              <p className="text-muted text-sm">
+                Enter your admin key to access the dashboard
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter admin key"
+                  value={adminKey}
+                  onChange={(e) => setAdminKey(e.target.value)}
+                  className="pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-text"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+
+              {loginError && (
+                <p className="text-red-500 text-sm text-center">{loginError}</p>
+              )}
+
+              <Button type="submit" size="lg" className="w-full">
+                Access Dashboard
+              </Button>
+            </form>
+          </div>
+        </motion.div>
+      </main>
+    );
+  }
+
+  // Admin Dashboard
+  return (
+    <AdminLayout
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      onLogout={handleLogout}
+    >
+      <AnimatePresence mode="wait">
+        {activeTab === "dashboard" && (
+          <motion.div
+            key="dashboard"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="space-y-8"
+          >
+            <div>
+              <h1 className="text-2xl font-bold text-text mb-2">Dashboard</h1>
+              <p className="text-muted">Overview of your content library</p>
+            </div>
+            <AdminStats content={content} />
+          </motion.div>
+        )}
+
+        {activeTab === "upload-movie" && (
+          <motion.div
+            key="upload-movie"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+          >
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-text mb-2">Upload Movie</h1>
+              <p className="text-muted">Add a new movie to your library</p>
+            </div>
+            <UploadMovieForm onSubmit={handleUploadMovie} isLoading={isLoading} />
+          </motion.div>
+        )}
+
+        {activeTab === "upload-series" && (
+          <motion.div
+            key="upload-series"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+          >
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-text mb-2">Upload Series</h1>
+              <p className="text-muted">Add a new web series with seasons and episodes</p>
+            </div>
+            <UploadSeriesForm onSubmit={handleUploadSeries} isLoading={isLoading} />
+          </motion.div>
+        )}
+
+        {activeTab === "manage" && (
+          <motion.div
+            key="manage"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="space-y-6"
+          >
+            <div>
+              <h1 className="text-2xl font-bold text-text mb-2">Manage Content</h1>
+              <p className="text-muted">Edit or delete existing content</p>
+            </div>
+            <AdminContentTable
+              content={content}
+              onEdit={handleEdit}
+              onDelete={handleDeleteClick}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Edit Modal */}
+      <EditContentModal
+        isOpen={editModalOpen}
+        onClose={() => {
+          setEditModalOpen(false);
+          setSelectedContent(null);
+        }}
+        content={selectedContent}
+        onSave={handleUpdate}
+        isLoading={isLoading}
+      />
+
+      {/* Delete Modal */}
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setSelectedContent(null);
+        }}
+        content={selectedContent}
+        onConfirm={handleDeleteConfirm}
+        isLoading={isLoading}
+      />
+    </AdminLayout>
+  );
+}
