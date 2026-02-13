@@ -30,7 +30,9 @@ export default function Footer() {
                 <Twitter className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/telugu.db?igsh=ancxNjhtdXdyZ2p5"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-background flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
               >
                 <Instagram className="w-5 h-5" />
@@ -70,14 +72,6 @@ export default function Footer() {
                   className="text-muted hover:text-primary transition-colors text-sm"
                 >
                   Web Series
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/admin"
-                  className="text-muted hover:text-primary transition-colors text-sm"
-                >
-                  Admin
                 </Link>
               </li>
             </ul>

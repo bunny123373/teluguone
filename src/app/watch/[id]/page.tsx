@@ -16,7 +16,6 @@ export default function WatchPage() {
   const params = useParams();
   const [movie, setMovie] = useState<IContent | null>(null);
   const [relatedMovies, setRelatedMovies] = useState<IContent[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
@@ -25,7 +24,6 @@ export default function WatchPage() {
   }, [params.id]);
 
   const fetchMovie = async () => {
-    setLoading(true);
     try {
       const response = await fetch(`/api/content/${params.id}`);
       const data = await response.json();
@@ -35,8 +33,6 @@ export default function WatchPage() {
       }
     } catch (error) {
       console.error("Error fetching movie:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -55,17 +51,6 @@ export default function WatchPage() {
       console.error("Error fetching related movies:", error);
     }
   };
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Navbar />
-        <div className="py-20 text-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
-      </main>
-    );
-  }
 
   if (!movie) {
     return (
@@ -166,15 +151,18 @@ export default function WatchPage() {
 
         {/* Related Movies */}
         {relatedMovies.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-text mb-6">Related Movies</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <section className="py-8 md:py-10 mt-6">
+            <div className="flex items-center justify-between mb-4 md:mb-6 px-2">
+              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text">Related Movies</h2>
+            </div>
+            <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
               {relatedMovies.map((item, index) => (
                 <motion.div
                   key={item._id.toString()}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
+                  className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
                 >
                   <ContentCard content={item} />
                 </motion.div>

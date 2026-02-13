@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://telugudb.com",
+    url: "https://teluguone.vercel.app",
     siteName: "TeluguDB",
     title: "TeluguDB - Stream & Download Telugu Movies & Web Series",
     description:
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     google: "your-google-verification-code",
   },
   alternates: {
-    canonical: "https://telugudb.com",
+    canonical: "https://teluguone.vercel.app",
   },
   icons: {
     icon: "/favicon.ico",

@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Trash2, ChevronDown, ChevronUp, Play, Download } from "lucide-react";
-import Input from "@/components/ui/Input";
+import { Plus, Trash2, ChevronDown, ChevronUp, Play } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { ISeason, IEpisode } from "@/models/Content";
 
@@ -23,17 +22,21 @@ export default function SeasonEpisodeBuilder({
       seasonNumber: seasons.length + 1,
       episodes: [],
     };
-    onChange([...seasons, newSeason]);
-    setExpandedSeason(seasons.length);
+    const newSeasons = JSON.parse(JSON.stringify(seasons)) as ISeason[];
+    newSeasons.push(newSeason);
+    onChange(newSeasons);
+    setExpandedSeason(newSeasons.length - 1);
   };
 
   const handleRemoveSeason = (index: number) => {
-    const newSeasons = seasons.filter((_, i) => i !== index);
-    onChange(newSeasons.map((s, i) => ({ ...s, seasonNumber: i + 1 })));
+    const newSeasons = JSON.parse(JSON.stringify(seasons)) as ISeason[];
+    newSeasons.splice(index, 1);
+    newSeasons.forEach((s, i) => { s.seasonNumber = i + 1; });
+    onChange(newSeasons);
   };
 
   const handleAddEpisode = (seasonIndex: number) => {
-    const newSeasons = [...seasons];
+    const newSeasons = JSON.parse(JSON.stringify(seasons)) as ISeason[];
     const newEpisode: IEpisode = {
       episodeNumber: newSeasons[seasonIndex].episodes.length + 1,
       episodeTitle: "",
@@ -46,13 +49,9 @@ export default function SeasonEpisodeBuilder({
   };
 
   const handleRemoveEpisode = (seasonIndex: number, episodeIndex: number) => {
-    const newSeasons = [...seasons];
-    newSeasons[seasonIndex].episodes = newSeasons[seasonIndex].episodes.filter(
-      (_, i) => i !== episodeIndex
-    );
-    newSeasons[seasonIndex].episodes = newSeasons[seasonIndex].episodes.map(
-      (e, i) => ({ ...e, episodeNumber: i + 1 })
-    );
+    const newSeasons = JSON.parse(JSON.stringify(seasons)) as ISeason[];
+    newSeasons[seasonIndex].episodes.splice(episodeIndex, 1);
+    newSeasons[seasonIndex].episodes.forEach((e, i) => { e.episodeNumber = i + 1; });
     onChange(newSeasons);
   };
 
@@ -62,7 +61,7 @@ export default function SeasonEpisodeBuilder({
     field: keyof IEpisode,
     value: string
   ) => {
-    const newSeasons = [...seasons];
+    const newSeasons = JSON.parse(JSON.stringify(seasons)) as ISeason[];
     newSeasons[seasonIndex].episodes[episodeIndex] = {
       ...newSeasons[seasonIndex].episodes[episodeIndex],
       [field]: value,
@@ -95,7 +94,6 @@ export default function SeasonEpisodeBuilder({
             key={seasonIndex}
             className="bg-background rounded-xl border border-border overflow-hidden"
           >
-            {/* Season Header */}
             <div
               className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
               onClick={() =>
@@ -127,7 +125,6 @@ export default function SeasonEpisodeBuilder({
               </button>
             </div>
 
-            {/* Episodes */}
             <AnimatePresence>
               {expandedSeason === seasonIndex && (
                 <motion.div

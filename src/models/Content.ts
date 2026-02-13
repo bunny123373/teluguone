@@ -38,12 +38,12 @@ const EpisodeSchema: Schema = new Schema({
   watchLink: { type: String, default: "" },
   downloadLink: { type: String, default: "" },
   quality: { type: String, default: "720p" },
-});
+}, { _id: false });
 
 const SeasonSchema: Schema = new Schema({
   seasonNumber: { type: Number, required: true },
   episodes: { type: [EpisodeSchema], default: [] },
-});
+}, { _id: false });
 
 const ContentSchema: Schema = new Schema(
   {

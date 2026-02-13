@@ -18,7 +18,6 @@ export default function SeriesDetailsPage() {
   const [series, setSeries] = useState<IContent | null>(null);
   const [similarSeries, setSimilarSeries] = useState<IContent[]>([]);
   const [selectedSeason, setSelectedSeason] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
@@ -27,7 +26,6 @@ export default function SeriesDetailsPage() {
   }, [params.id]);
 
   const fetchSeries = async () => {
-    setLoading(true);
     try {
       const response = await fetch(`/api/content/${params.id}`);
       const data = await response.json();
@@ -37,8 +35,6 @@ export default function SeriesDetailsPage() {
       }
     } catch (error) {
       console.error("Error fetching series:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -67,17 +63,6 @@ export default function SeriesDetailsPage() {
     }
     return null;
   };
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Navbar />
-        <div className="py-20 text-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
-      </main>
-    );
-  }
 
   if (!series) {
     return (
@@ -275,15 +260,19 @@ export default function SeriesDetailsPage() {
 
         {/* Similar Series */}
         {similarSeries.length > 0 && (
-          <section className="py-12">
-            <h2 className="text-2xl font-bold text-text mb-6">Similar Series</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <section className="py-8 md:py-12 mt-6 md:mt-10">
+            <div className="flex items-center justify-between mb-4 md:mb-6 px-2">
+              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text">Similar Series</h2>
+            </div>
+            {/* Horizontal scroll on mobile, grid on larger screens */}
+            <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
               {similarSeries.map((item, index) => (
                 <motion.div
                   key={item._id.toString()}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
                 >
                   <ContentCard content={item} />
                 </motion.div>

@@ -11,16 +11,10 @@
 }
 
 html {
-  scroll-behavior: smooth;
-}
-
-/* Prevent flash of unstyled content */
-html {
-  visibility: hidden;
-}
-
-html.loaded {
+  scroll-behavior: auto;
   visibility: visible;
+  height: auto;
+  overflow-y: scroll;
 }
 
 body {
@@ -28,13 +22,8 @@ body {
   background-color: #070A12;
   color: #E5E7EB;
   min-height: 100vh;
+  overflow-y: visible;
   overflow-x: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-body.loaded {
-  opacity: 1;
 }
 
 /* Instant background to prevent white flash */
@@ -304,7 +293,7 @@ button:active {
 
 /* Smooth scroll behavior */
 .smooth-scroll {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -474,29 +463,14 @@ button:active {
   }
 }
 
-/* Smooth scrollbar */
-.smooth-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #1E293B #0F172A;
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.smooth-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.smooth-scrollbar::-webkit-scrollbar-track {
-  background: #0F172A;
-}
-
-.smooth-scrollbar::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 3px;
-  transition: background 0.2s ease;
-}
-
-.smooth-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #FF2E63;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Video Player Custom Styles */

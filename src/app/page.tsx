@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setContent, setLoading } from "@/redux/slices/contentSlice";
 import Navbar from "@/components/Navbar";
@@ -14,35 +13,36 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Home() {
   const dispatch = useAppDispatch();
-  const { list: content, loading } = useAppSelector((state) => state.content);
+  const { list: content } = useAppSelector((state) => state.content);
   const { search, typeFilter } = useAppSelector((state) => state.ui);
   const [featuredContent, setFeaturedContent] = useState<IContent | null>(null);
-  const [scrollPositions, setScrollPositions] = useState<Record<string, number>>({});
+  const [allContent, setAllContent] = useState<IContent[]>([]);
 
   useEffect(() => {
     fetchContent();
   }, []);
 
   const fetchContent = async () => {
-    dispatch(setLoading(true));
     try {
       const response = await fetch("/api/content");
       const data = await response.json();
       if (data.success) {
-        dispatch(setContent(data.data));
-        if (data.data.length > 0) {
-          setFeaturedContent(data.data[0]);
+        const contentList = data.data;
+        dispatch(setContent(contentList));
+        setAllContent(contentList);
+        if (contentList.length > 0) {
+          setFeaturedContent(contentList[0]);
         }
       }
     } catch (error) {
       console.error("Error fetching content:", error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 
+  const displayContent = allContent.length > 0 ? allContent : content;
+
   // Filter content based on search and type filter
-  const filteredContent = content.filter((item) => {
+  const filteredContent = displayContent.filter((item) => {
     const matchesSearch =
       !search ||
       item.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -73,11 +73,11 @@ export default function Home() {
   const scrollContainer = (section: string, direction: "left" | "right") => {
     const container = document.getElementById(`scroll-${section}`);
     if (container) {
-      const scrollAmount = 300;
+      const scrollAmount = container.offsetWidth * 0.8;
       const newScrollLeft =
         direction === "left"
-          ? container.scrollLeft - scrollAmount
-          : container.scrollLeft + scrollAmount;
+          ? Math.max(0, container.scrollLeft - scrollAmount)
+          : Math.min(container.scrollWidth - container.offsetWidth, container.scrollLeft + scrollAmount);
       container.scrollTo({ left: newScrollLeft, behavior: "smooth" });
     }
   };
@@ -93,56 +93,94 @@ export default function Home() {
   }) => {
     if (items.length === 0) return null;
 
+    const cardWidth = 200;
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [containerWidth, setContainerWidth] = useState(800);
+
+    useEffect(() => {
+      const updateWidth = () => {
+        if (containerRef.current) {
+          setContainerWidth(containerRef.current.offsetWidth);
+        }
+      };
+      updateWidth();
+      window.addEventListener('resize', updateWidth);
+      return () => window.removeEventListener('resize', updateWidth);
+    }, []);
+
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+      const container = e.currentTarget;
+      const page = Math.round(container.scrollLeft / (container.offsetWidth - cardWidth));
+      setCurrentPage(Math.max(0, page));
+    };
+
+    const goToPage = (page: number) => {
+      const container = containerRef.current;
+      if (container) {
+        const scrollAmount = container.offsetWidth - cardWidth;
+        container.scrollTo({ left: page * scrollAmount, behavior: "smooth" });
+        setCurrentPage(page);
+      }
+    };
+
+    const itemsPerPage = Math.floor(containerWidth / cardWidth) || 4;
+    const totalPages = Math.max(1, Math.ceil(items.length / itemsPerPage));
+
     return (
       <section className="py-8">
         <div className="flex items-center justify-between mb-6">
-          <motion.h2
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="text-xl font-bold text-text"
-          >
-            {title}
-          </motion.h2>
+          <h2 className="text-xl font-bold text-text">{title}</h2>
           <div className="flex gap-2">
             <button
-              onClick={() => scrollContainer(sectionId, "left")}
-              className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200 global-smooth haptic-touch touch-friendly"
+              onClick={() => goToPage(Math.max(0, currentPage - 1))}
+              className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center flex-shrink-0"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={() => scrollContainer(sectionId, "right")}
-              className="w-8 h-8 rounded-full bg-card border border-border flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-200 global-smooth haptic-touch touch-friendly"
+              onClick={() => goToPage(Math.min(totalPages - 1, currentPage + 1))}
+              className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center flex-shrink-0"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
         <div
-          id={`scroll-${sectionId}`}
-          className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-container smooth-scrollbar"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          ref={containerRef}
+          className="flex gap-4 overflow-x-auto pb-4"
+          onScroll={handleScroll}
         >
-          {items.map((item, index) => (
-            <motion.div
+          {items.map((item) => (
+            <div
               key={item._id.toString()}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
               className="flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px]"
             >
               <ContentCard content={item} />
-            </motion.div>
+            </div>
           ))}
         </div>
+        {items.length > itemsPerPage && (
+          <div className="flex justify-center gap-2 mt-4">
+            {Array.from({ length: Math.min(totalPages, 10) }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToPage(i)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  currentPage === i
+                    ? "bg-primary w-8"
+                    : "bg-muted/50 w-2 hover:bg-muted hover:scale-110"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </section>
     );
   };
 
   return (
-    <main className="min-h-screen bg-background smooth-scroll">
+    <main className="min-h-screen bg-background">
       <Navbar />
 
       {/* Hero Banner */}
@@ -151,26 +189,17 @@ export default function Home() {
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Loading State */}
-        {loading && (
-          <div className="py-20 text-center">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-muted">Loading content...</p>
-          </div>
-        )}
-
-        {/* No Results */}
-        {!loading && filteredContent.length === 0 && (
+        {/* Content Sections - show all if no results */}
+        {(filteredContent.length === 0 && allContent.length > 0) ? (
+          <ContentGrid title="All Content" content={allContent} />
+        ) : filteredContent.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-muted text-lg">No content found</p>
             <p className="text-muted text-sm mt-2">
               Try adjusting your search or filters
             </p>
           </div>
-        )}
-
-        {/* Content Sections */}
-        {!loading && (
+        ) : (
           <>
             {/* Trending - Horizontal Scroll */}
             <HorizontalScrollSection

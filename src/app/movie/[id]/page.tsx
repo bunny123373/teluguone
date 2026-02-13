@@ -17,7 +17,6 @@ export default function MovieDetailsPage() {
   const params = useParams();
   const [movie, setMovie] = useState<IContent | null>(null);
   const [similarMovies, setSimilarMovies] = useState<IContent[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
@@ -26,7 +25,6 @@ export default function MovieDetailsPage() {
   }, [params.id]);
 
   const fetchMovie = async () => {
-    setLoading(true);
     try {
       const response = await fetch(`/api/content/${params.id}`);
       const data = await response.json();
@@ -36,8 +34,6 @@ export default function MovieDetailsPage() {
       }
     } catch (error) {
       console.error("Error fetching movie:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -56,70 +52,6 @@ export default function MovieDetailsPage() {
       console.error("Error fetching similar movies:", error);
     }
   };
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Navbar />
-        
-        {/* Banner Skeleton */}
-        <div className="relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[500px] skeleton" />
-        
-        {/* Content Skeleton */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 sm:-mt-40 md:-mt-48 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-            {/* Poster Skeleton */}
-            <div className="lg:col-span-1">
-              <div className="relative aspect-[2/3] rounded-2xl skeleton max-w-sm mx-auto lg:max-w-none" />
-            </div>
-            
-            {/* Details Skeleton */}
-            <div className="lg:col-span-2 space-y-4 md:space-y-6">
-              {/* Back Button Skeleton */}
-              <div className="h-6 w-24 skeleton rounded" />
-              
-              {/* Badges Skeleton */}
-              <div className="flex flex-wrap gap-2">
-                <div className="h-6 w-16 skeleton rounded-full" />
-                <div className="h-6 w-12 skeleton rounded-full" />
-                <div className="h-6 w-16 skeleton rounded-full" />
-              </div>
-              
-              {/* Title Skeleton */}
-              <div className="h-10 w-3/4 skeleton rounded-lg" />
-              
-              {/* Meta Info Skeleton */}
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                <div className="h-5 w-16 skeleton rounded" />
-                <div className="h-5 w-12 skeleton rounded" />
-                <div className="h-5 w-16 skeleton rounded" />
-              </div>
-              
-              {/* Description Skeleton */}
-              <div className="space-y-2">
-                <div className="h-4 skeleton rounded" />
-                <div className="h-4 w-5/6 skeleton rounded" />
-                <div className="h-4 w-4/6 skeleton rounded" />
-              </div>
-              
-              {/* Tags Skeleton */}
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                <div className="h-8 w-16 skeleton rounded-full" />
-                <div className="h-8 w-20 skeleton rounded-full" />
-                <div className="h-8 w-14 skeleton rounded-full" />
-              </div>
-              
-              {/* Buttons Skeleton */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-                <div className="h-12 w-32 skeleton rounded-lg" />
-                <div className="h-12 w-28 skeleton rounded-lg" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
 
   if (!movie) {
     return (
@@ -273,15 +205,19 @@ export default function MovieDetailsPage() {
 
         {/* Similar Movies */}
         {similarMovies.length > 0 && (
-          <section className="py-8 md:py-12 scroll-container">
-            <h2 className="text-xl md:text-2xl font-bold text-text mb-4 md:mb-6">Similar Movies</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4">
+          <section className="py-8 md:py-12 mt-6 md:mt-10">
+            <div className="flex items-center justify-between mb-4 md:mb-6 px-2">
+              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text">Similar Movies</h2>
+            </div>
+            {/* Horizontal scroll on mobile, grid on larger screens */}
+            <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
               {similarMovies.map((item, index) => (
                 <motion.div
                   key={item._id.toString()}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
                 >
                   <ContentCard content={item} />
                 </motion.div>
