@@ -96,17 +96,24 @@ export default function AdminPage() {
 
   const handleUploadMovie = async (data: any) => {
     setIsLoading(true);
+    console.log("Uploading movie data:", data);
     try {
+      const adminKey = getAdminKey();
+      console.log("Admin key:", adminKey ? "present" : "missing");
+      
       const response = await fetch("/api/content", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-key": getAdminKey(),
+          "x-admin-key": adminKey,
         },
         body: JSON.stringify(data),
       });
 
+      console.log("Response status:", response.status);
       const result = await response.json();
+      console.log("Response data:", result);
+      
       if (result.success) {
         dispatch(addContent(result.data));
         alert("Movie uploaded successfully!");
@@ -116,7 +123,7 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error("Error uploading movie:", error);
-      alert("An error occurred while uploading");
+      alert("An error occurred while uploading: " + (error as Error).message);
     } finally {
       setIsLoading(false);
     }
@@ -124,17 +131,24 @@ export default function AdminPage() {
 
   const handleUploadSeries = async (data: any) => {
     setIsLoading(true);
+    console.log("Uploading series data:", data);
     try {
+      const adminKey = getAdminKey();
+      console.log("Admin key:", adminKey ? "present" : "missing");
+      
       const response = await fetch("/api/content", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-key": getAdminKey(),
+          "x-admin-key": adminKey,
         },
         body: JSON.stringify(data),
       });
 
+      console.log("Response status:", response.status);
       const result = await response.json();
+      console.log("Response data:", result);
+      
       if (result.success) {
         dispatch(addContent(result.data));
         alert("Series uploaded successfully!");
@@ -144,7 +158,7 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error("Error uploading series:", error);
-      alert("An error occurred while uploading");
+      alert("An error occurred while uploading: " + (error as Error).message);
     } finally {
       setIsLoading(false);
     }

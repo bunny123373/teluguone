@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Content from "@/models/Content";
 
+// Helper function for API responses
+const createResponse = (data: any, status: number = 200) => {
+  return NextResponse.json(data, { 
+    status,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, x-admin-key',
+    }
+  });
+};
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+  return createResponse({}, 204);
+}
+
 // GET /api/content - Get all content (public)
 export async function GET(request: NextRequest) {
   try {
@@ -37,13 +54,10 @@ export async function GET(request: NextRequest) {
 
     const content = await Content.find(query).sort({ createdAt: -1 });
 
-    return NextResponse.json({ success: true, data: content }, { status: 200 });
+    return createResponse({ success: true, data: content }, 200);
   } catch (error) {
     console.error("Error fetching content:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch content" },
-      { status: 500 }
-    );
+    return createResponse({ success: false, error: "Failed to fetch content" }, 500);
   }
 }
 
@@ -53,9 +67,9 @@ export async function POST(request: NextRequest) {
     const adminKey = request.headers.get("x-admin-key");
 
     if (adminKey !== process.env.ADMIN_KEY) {
-      return NextResponse.json(
+      return createResponse(
         { success: false, error: "Unauthorized - Invalid admin key" },
-        { status: 401 }
+        401
       );
     }
 
@@ -65,15 +79,12 @@ export async function POST(request: NextRequest) {
 
     const content = await Content.create(body);
 
-    return NextResponse.json(
+    return createResponse(
       { success: true, data: content, message: "Content created successfully" },
-      { status: 201 }
+      201
     );
   } catch (error) {
     console.error("Error creating content:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to create content" },
-      { status: 500 }
-    );
+    return createResponse({ success: false, error: "Failed to create content" }, 500);
   }
 }

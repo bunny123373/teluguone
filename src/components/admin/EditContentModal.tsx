@@ -75,8 +75,8 @@ export default function EditContentModal({
   if (!content) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Content" className="max-w-3xl max-h-[90vh]">
-      <form onSubmit={handleSubmit} className="space-y-6 overflow-auto max-h-[70vh] pr-2">
+    <Modal isOpen={isOpen} onClose={onClose} title="Edit Content" className="max-w-2xl md:max-w-3xl">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             label="Title *"

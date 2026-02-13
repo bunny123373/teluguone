@@ -33,11 +33,11 @@ export interface IContent extends Document {
 }
 
 const EpisodeSchema: Schema = new Schema({
-  episodeNumber: { type: Number, required: true },
-  episodeTitle: { type: String, required: true },
-  watchLink: { type: String, required: true },
-  downloadLink: { type: String, required: true },
-  quality: { type: String },
+  episodeNumber: { type: Number, default: 1 },
+  episodeTitle: { type: String, default: "" },
+  watchLink: { type: String, default: "" },
+  downloadLink: { type: String, default: "" },
+  quality: { type: String, default: "720p" },
 });
 
 const SeasonSchema: Schema = new Schema({

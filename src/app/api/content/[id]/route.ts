@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Content from "@/models/Content";
 
+// Helper function for API responses
+const createResponse = (data: any, status: number = 200) => {
+  return NextResponse.json(data, { 
+    status,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, x-admin-key',
+    }
+  });
+};
+
+// Handle OPTIONS requests for CORS preflight
+export async function OPTIONS() {
+  return createResponse({}, 204);
+}
+
 // GET /api/content/[id] - Get single content (public)
 export async function GET(
   request: NextRequest,
@@ -13,19 +30,13 @@ export async function GET(
     const content = await Content.findById(params.id);
 
     if (!content) {
-      return NextResponse.json(
-        { success: false, error: "Content not found" },
-        { status: 404 }
-      );
+      return createResponse({ success: false, error: "Content not found" }, 404);
     }
 
-    return NextResponse.json({ success: true, data: content }, { status: 200 });
+    return createResponse({ success: true, data: content }, 200);
   } catch (error) {
     console.error("Error fetching content:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch content" },
-      { status: 500 }
-    );
+    return createResponse({ success: false, error: "Failed to fetch content" }, 500);
   }
 }
 
@@ -38,9 +49,9 @@ export async function PUT(
     const adminKey = request.headers.get("x-admin-key");
 
     if (adminKey !== process.env.ADMIN_KEY) {
-      return NextResponse.json(
+      return createResponse(
         { success: false, error: "Unauthorized - Invalid admin key" },
-        { status: 401 }
+        401
       );
     }
 
@@ -55,22 +66,16 @@ export async function PUT(
     );
 
     if (!content) {
-      return NextResponse.json(
-        { success: false, error: "Content not found" },
-        { status: 404 }
-      );
+      return createResponse({ success: false, error: "Content not found" }, 404);
     }
 
-    return NextResponse.json(
+    return createResponse(
       { success: true, data: content, message: "Content updated successfully" },
-      { status: 200 }
+      200
     );
   } catch (error) {
     console.error("Error updating content:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to update content" },
-      { status: 500 }
-    );
+    return createResponse({ success: false, error: "Failed to update content" }, 500);
   }
 }
 
@@ -83,9 +88,9 @@ export async function DELETE(
     const adminKey = request.headers.get("x-admin-key");
 
     if (adminKey !== process.env.ADMIN_KEY) {
-      return NextResponse.json(
+      return createResponse(
         { success: false, error: "Unauthorized - Invalid admin key" },
-        { status: 401 }
+        401
       );
     }
 
@@ -94,21 +99,15 @@ export async function DELETE(
     const content = await Content.findByIdAndDelete(params.id);
 
     if (!content) {
-      return NextResponse.json(
-        { success: false, error: "Content not found" },
-        { status: 404 }
-      );
+      return createResponse({ success: false, error: "Content not found" }, 404);
     }
 
-    return NextResponse.json(
+    return createResponse(
       { success: true, message: "Content deleted successfully" },
-      { status: 200 }
+      200
     );
   } catch (error) {
     console.error("Error deleting content:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to delete content" },
-      { status: 500 }
-    );
+    return createResponse({ success: false, error: "Failed to delete content" }, 500);
   }
 }

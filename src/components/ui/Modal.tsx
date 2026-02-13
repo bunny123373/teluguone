@@ -36,13 +36,14 @@ export default function Modal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-              "w-full max-w-lg max-h-[90vh] overflow-auto",
-              "bg-card border border-border rounded-2xl shadow-2xl z-50",
+              "fixed inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
+              "w-full h-full md:h-auto md:max-h-[90vh] md:w-full md:max-w-lg",
+              "bg-card border border-border rounded-none md:rounded-2xl shadow-2xl z-50",
+              "flex flex-col",
               className
             )}
           >
-            <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
               {title && (
                 <h3 className="text-lg font-semibold text-text">{title}</h3>
               )}
@@ -53,7 +54,7 @@ export default function Modal({
                 <X className="w-5 h-5 text-muted" />
               </button>
             </div>
-            <div className="p-4">{children}</div>
+            <div className="flex-1 overflow-auto p-4">{children}</div>
           </motion.div>
         </>
       )}
