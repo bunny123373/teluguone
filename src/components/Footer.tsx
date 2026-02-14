@@ -76,24 +76,52 @@ export default function Footer() {
                   Web Series
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-muted hover:text-primary transition-colors text-sm"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-muted hover:text-primary transition-colors text-sm"
+                >
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* Legal */}
           <div>
-            <h3 className="text-text font-semibold mb-4">Categories</h3>
+            <h3 className="text-text font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <span className="text-muted text-sm">Trending</span>
+                <Link
+                  href="/privacy"
+                  className="text-muted hover:text-primary transition-colors text-sm"
+                >
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <span className="text-muted text-sm">Latest</span>
+                <Link
+                  href="/terms"
+                  className="text-muted hover:text-primary transition-colors text-sm"
+                >
+                  Terms of Service
+                </Link>
               </li>
               <li>
-                <span className="text-muted text-sm">Dubbed</span>
-              </li>
-              <li>
-                <span className="text-muted text-sm">Action</span>
+                <Link
+                  href="/disclaimer"
+                  className="text-muted hover:text-primary transition-colors text-sm"
+                >
+                  Disclaimer
+                </Link>
               </li>
             </ul>
           </div>

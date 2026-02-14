@@ -1,5 +1,8 @@
 {
   "/page": "app/page.js",
-  "/movie/[id]/page": "app/movie/[id]/page.js",
-  "/api/content/route": "app/api/content/route.js"
+  "/api/content/route": "app/api/content/route.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/terms/page": "app/terms/page.js",
+  "/disclaimer/page": "app/disclaimer/page.js",
+  "/about/page": "app/about/page.js"
 }
