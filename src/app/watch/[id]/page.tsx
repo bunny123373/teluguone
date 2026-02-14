@@ -57,10 +57,7 @@ export default function WatchPage() {
       <main className="min-h-screen bg-background">
         <Navbar />
         <div className="py-20 text-center">
-          <p className="text-muted text-lg">Movie not found</p>
-          <Link href="/" className="text-primary hover:underline mt-4 inline-block">
-            Go back home
-          </Link>
+          <p className="text-muted text-lg">Redirecting...</p>
         </div>
       </main>
     );
