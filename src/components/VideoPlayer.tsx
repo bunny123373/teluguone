@@ -17,12 +17,15 @@ import {
 import Button from "./ui/Button";
 
 interface VideoPlayerProps {
-  src: string;
+  src?: string;
+  sources?: { quality: string; url: string }[];
   downloadLink?: string;
   title?: string;
 }
 
-export default function VideoPlayer({ src, downloadLink, title }: VideoPlayerProps) {
+const QUALITIES = ["4K", "1080p", "720p", "480p"];
+
+export default function VideoPlayer({ src, sources, downloadLink, title }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -34,8 +37,16 @@ export default function VideoPlayer({ src, downloadLink, title }: VideoPlayerPro
   const [volume, setVolume] = useState(1);
   const [showControls, setShowControls] = useState(true);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [showQualityMenu, setShowQualityMenu] = useState(false);
+  const [currentQuality, setCurrentQuality] = useState("Auto");
   const [error, setError] = useState<string | null>(null);
   const controlsTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const videoSources = sources && sources.length > 0 
+    ? QUALITIES.filter(q => sources.some(s => s.quality === q)).map(q => ({ quality: q, url: sources.find(s => s.quality === q)!.url }))
+    : src ? [{ quality: "Auto", url: src }] : [];
+
+  const currentSrc = videoSources.find(s => s.quality === currentQuality)?.url || videoSources[0]?.url || "";
 
   const formatTime = (time: number) => {
     if (!time || isNaN(time)) return "0:00";
@@ -286,7 +297,7 @@ export default function VideoPlayer({ src, downloadLink, title }: VideoPlayerPro
       <div className="relative w-full aspect-video bg-black">
         <video
           ref={videoRef}
-          src={src}
+          src={currentSrc}
           className="w-full h-full"
           onClick={togglePlay}
           playsInline
@@ -430,6 +441,37 @@ export default function VideoPlayer({ src, downloadLink, title }: VideoPlayerPro
 
           {/* Right Controls */}
           <div className="flex items-center gap-1 md:gap-2">
+            {/* Quality Selector */}
+            {videoSources.length > 1 && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowQualityMenu(!showQualityMenu)}
+                  className="px-2 py-1 rounded-lg hover:bg-white/10 transition-colors text-xs text-white font-medium"
+                  title="Quality"
+                >
+                  {currentQuality}
+                </button>
+                {showQualityMenu && (
+                  <div className="absolute bottom-full right-0 mb-2 bg-black/90 rounded-lg py-1 min-w-[80px]">
+                    {videoSources.map((source) => (
+                      <button
+                        key={source.quality}
+                        onClick={() => {
+                          setCurrentQuality(source.quality);
+                          setShowQualityMenu(false);
+                        }}
+                        className={`w-full px-3 py-1.5 text-left text-sm hover:bg-white/10 ${
+                          currentQuality === source.quality ? "text-primary" : "text-white"
+                        }`}
+                      >
+                        {source.quality}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* PiP */}
             <button
               onClick={togglePiP}

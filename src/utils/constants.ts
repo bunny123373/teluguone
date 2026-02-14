@@ -20,6 +20,25 @@ export const CATEGORIES = [
   "Romance",
 ];
 
+export const GENRES = [
+  "Action",
+  "Adventure",
+  "Animation",
+  "Comedy",
+  "Crime",
+  "Drama",
+  "Family",
+  "Fantasy",
+  "Horror",
+  "Musical",
+  "Mystery",
+  "Romance",
+  "Sci-Fi",
+  "Sport",
+  "Thriller",
+  "War",
+];
+
 export const QUALITIES = ["480p", "720p", "1080p", "4K"];
 
 export const TYPE_FILTERS = [

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setContent, setLoading } from "@/redux/slices/contentSlice";
+import { setContent } from "@/redux/slices/contentSlice";
 import Navbar from "@/components/Navbar";
 import HeroBanner from "@/components/HeroBanner";
 import ContentGrid from "@/components/ContentGrid";
@@ -17,6 +17,7 @@ export default function Home() {
   const { search, typeFilter } = useAppSelector((state) => state.ui);
   const [featuredContent, setFeaturedContent] = useState<IContent | null>(null);
   const [allContent, setAllContent] = useState<IContent[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     fetchContent();
@@ -41,7 +42,7 @@ export default function Home() {
 
   const displayContent = allContent.length > 0 ? allContent : content;
 
-  // Filter content based on search and type filter
+  // Filter content based on search, type filter and category
   const filteredContent = displayContent.filter((item) => {
     const matchesSearch =
       !search ||
@@ -52,83 +53,15 @@ export default function Home() {
     const matchesType =
       typeFilter === "all" || item.type === typeFilter;
 
-    return matchesSearch && matchesType;
+    const matchesCategory =
+      selectedCategory === "All" ||
+      item.category?.toLowerCase() === selectedCategory.toLowerCase() ||
+      item.genre?.toLowerCase() === selectedCategory.toLowerCase();
+
+    return matchesSearch && matchesType && matchesCategory;
   });
 
-  // Get content by category
-  const getContentByCategory = (category: string) =>
-    filteredContent.filter(
-      (item) => item.category?.toLowerCase() === category.toLowerCase()
-    );
-
-  const getContentByLanguage = (language: string) =>
-    filteredContent.filter((item) => item.language === language);
-
-  const trendingContent = getContentByCategory("Trending");
-  const latestContent = getContentByCategory("Latest");
-  const teluguMovies = getContentByLanguage("Telugu");
-  const hindiDubbed = getContentByLanguage("Hindi");
-  const webSeries = filteredContent.filter((item) => item.type === "series");
-
-  const scrollContainer = (section: string, direction: "left" | "right") => {
-    const container = document.getElementById(`scroll-${section}`);
-    if (container) {
-      const scrollAmount = container.offsetWidth * 0.8;
-      const newScrollLeft =
-        direction === "left"
-          ? Math.max(0, container.scrollLeft - scrollAmount)
-          : Math.min(container.scrollWidth - container.offsetWidth, container.scrollLeft + scrollAmount);
-      container.scrollTo({ left: newScrollLeft, behavior: "smooth" });
-    }
-  };
-
-  const HorizontalScrollSection = ({
-    title,
-    items,
-    sectionId,
-  }: {
-    title: string;
-    items: IContent[];
-    sectionId: string;
-  }) => {
-    if (items.length === 0) return null;
-
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const scroll = (direction: "left" | "right") => {
-      const container = containerRef.current;
-      if (container) {
-        const scrollAmount = container.offsetWidth * 0.8;
-        const newLeft = direction === "left" 
-          ? Math.max(0, container.scrollLeft - scrollAmount)
-          : Math.min(container.scrollWidth - container.offsetWidth, container.scrollLeft + scrollAmount);
-        container.scrollTo({ left: newLeft, behavior: "smooth" });
-      }
-    };
-
-    return (
-      <section className="py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-text">{title}</h2>
-          <div className="flex gap-2">
-            <button onClick={() => scroll("left")} className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center">
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button onClick={() => scroll("right")} className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center">
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-        <div ref={containerRef} className="flex gap-4 overflow-x-auto pb-4">
-          {items.map((item) => (
-            <div key={item._id.toString()} className="flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px]">
-              <ContentCard content={item} />
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  };
+  const categories = ["All", "Trending", "Latest", "Telugu", "Hindi", "Tamil", "English", "Web Series", "Action", "Comedy", "Drama", "Thriller"];
 
   return (
     <main className="min-h-screen bg-background">
@@ -139,13 +72,36 @@ export default function Home() {
         <HeroBanner content={featuredContent} />
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Show content if available */}
-        {allContent.length > 0 ? (
-          <>
-            <ContentGrid title="All Content" content={displayContent} />
-          </>
-        ) : null}
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
+        {/* Mobile Category Filter */}
+        <div className="mb-4 overflow-x-auto flex gap-2 pb-2 scrollbar-hide">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm flex-shrink-0 ${
+                selectedCategory === cat
+                  ? "bg-primary text-white"
+                  : "bg-card text-muted hover:text-text"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Content Area */}
+        <div>
+          {allContent.length > 0 ? (
+            <>
+              <h2 className="text-lg sm:text-xl font-bold text-text mb-4">
+                {selectedCategory === "All" ? "All Content" : selectedCategory}
+                <span className="text-muted text-sm font-normal ml-2">({filteredContent.length} items)</span>
+              </h2>
+              <ContentGrid title="" content={filteredContent} />
+            </>
+          ) : null}
+        </div>
       </div>
 
       <Footer />

@@ -1,8 +1,10 @@
 {
+  "/about/page": "app/about/page.js",
+  "/watch/[id]/page": "app/watch/[id]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/movie/[id]/page": "app/movie/[id]/page.js",
   "/page": "app/page.js",
+  "/api/content/[id]/route": "app/api/content/[id]/route.js",
   "/api/content/route": "app/api/content/route.js",
-  "/privacy/page": "app/privacy/page.js",
-  "/terms/page": "app/terms/page.js",
-  "/disclaimer/page": "app/disclaimer/page.js",
-  "/about/page": "app/about/page.js"
+  "/_not-found/page": "app/_not-found/page.js"
 }

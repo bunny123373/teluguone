@@ -6,7 +6,7 @@ import { Film, Upload, X } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
-import { LANGUAGES, CATEGORIES, QUALITIES } from "@/utils/constants";
+import { LANGUAGES, CATEGORIES, GENRES, QUALITIES } from "@/utils/constants";
 
 interface UploadMovieFormProps {
   onSubmit: (data: any) => void;
@@ -23,6 +23,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
     year: "",
     language: "",
     category: "",
+    genre: "",
     quality: "",
     rating: "",
     tags: [] as string[],
@@ -139,6 +140,24 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
             {CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Genre */}
+        <div>
+          <label className="block text-sm font-medium text-text mb-1.5">Genre</label>
+          <select
+            name="genre"
+            value={formData.genre}
+            onChange={handleChange}
+            className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            <option value="">Select Genre</option>
+            {GENRES.map((g) => (
+              <option key={g} value={g}>
+                {g}
               </option>
             ))}
           </select>

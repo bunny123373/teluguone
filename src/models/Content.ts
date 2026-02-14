@@ -22,6 +22,7 @@ export interface IContent extends Document {
   year?: string;
   language?: string;
   category?: string;
+  genre?: string;
   quality?: string;
   rating?: number;
   tags?: string[];
@@ -55,6 +56,7 @@ const ContentSchema: Schema = new Schema(
     year: { type: String },
     language: { type: String },
     category: { type: String },
+    genre: { type: String },
     quality: { type: String },
     rating: { type: Number },
     tags: { type: [String], default: [] },

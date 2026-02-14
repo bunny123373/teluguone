@@ -19,9 +19,9 @@ export default function ContentGrid({
   }
 
   return (
-    <section className="py-8">
-      <h2 className="text-xl font-bold text-text mb-6">{title}</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+    <section>
+      {title && <h2 className="text-lg sm:text-xl font-bold text-text mb-3 sm:mb-4">{title}</h2>}
+      <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
         {content.map((item) => (
           <ContentCard key={item._id.toString()} content={item} />
         ))}
