@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Film, Heart, Github, Twitter, Instagram } from "lucide-react";
+import { Film, Heart, Github, Send, Instagram } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -24,10 +24,12 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="#"
+                href="https://t.me/telugudbmovies1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-background flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
               >
-                <Twitter className="w-5 h-5" />
+                <Send className="w-5 h-5" />
               </a>
               <a
                 href="https://www.instagram.com/telugu.db?igsh=ancxNjhtdXdyZ2p5"
