@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Tv, Upload, X } from "lucide-react";
+import { Tv, Upload, X, Database } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
+import TMDBFetchModal from "./TMDBFetchModal";
 import { LANGUAGES, CATEGORIES, GENRES, QUALITIES } from "@/utils/constants";
 import SeasonEpisodeBuilder from "./SeasonEpisodeBuilder";
 import { ISeason } from "@/models/Content";
@@ -31,6 +32,28 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
     seasons: [] as ISeason[],
   });
   const [tagInput, setTagInput] = useState("");
+  const [showTMDbModal, setShowTMDbModal] = useState(false);
+
+  const handleTMDBFetch = (result: {
+    title: string;
+    poster: string;
+    backdrop: string;
+    description: string;
+    year: string;
+    rating: number;
+    genres: string[];
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
+      title: result.title,
+      poster: result.poster,
+      banner: result.backdrop,
+      description: result.description,
+      year: result.year,
+      rating: result.rating.toString(),
+      genre: result.genres[0] || "",
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -74,14 +97,24 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Title */}
-        <Input
-          label="Title *"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Enter series title"
-          required
-        />
+        <div className="relative">
+          <Input
+            label="Title *"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Enter series title"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowTMDbModal(true)}
+            className="absolute right-0 top-0 flex items-center gap-1 text-xs text-secondary hover:text-secondary/80"
+          >
+            <Database className="w-3 h-3" />
+            Auto-fill
+          </button>
+        </div>
 
         {/* Year */}
         <Input
@@ -219,6 +252,13 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
           Upload Series
         </Button>
       </div>
+
+      <TMDBFetchModal
+        isOpen={showTMDbModal}
+        onClose={() => setShowTMDbModal(false)}
+        onFetch={handleTMDBFetch}
+        mediaType="tv"
+      />
     </form>
   );
 }
