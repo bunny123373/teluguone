@@ -42,6 +42,7 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
     year: string;
     rating: number;
     genres: string[];
+    category: string;
   }) => {
     setFormData((prev) => ({
       ...prev,
@@ -52,6 +53,7 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
       year: result.year,
       rating: result.rating.toString(),
       genre: result.genres[0] || "",
+      category: result.category || "Web Series",
     }));
   };
 

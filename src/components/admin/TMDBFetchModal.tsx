@@ -13,6 +13,7 @@ import {
   getBackdropUrl,
   getYearFromDate,
   mapGenreToApp,
+  inferCategory,
   TMDBSearchResult,
   TMDBMovieDetails,
   TMDBTvDetails,
@@ -26,6 +27,7 @@ interface TMDBResult {
   year: string;
   rating: number;
   genres: string[];
+  category: string;
   type: "movie" | "tv";
 }
 
@@ -49,17 +51,6 @@ export default function TMDBFetchModal({
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [fetchingDetails, setFetchingDetails] = useState(false);
 
-  useEffect(() => {
-    if (query.trim().length >= 2) {
-      const timer = setTimeout(() => {
-        handleSearch();
-      }, 500);
-      return () => clearTimeout(timer);
-    } else {
-      setResults([]);
-    }
-  }, [query]);
-
   const handleSearch = async () => {
     if (!query.trim()) return;
     setSearching(true);
@@ -72,6 +63,28 @@ export default function TMDBFetchModal({
       setSearching(false);
     }
   };
+
+  useEffect(() => {
+    if (query.trim().length < 2) {
+      setResults([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setSearching(true);
+      searchTMDB(query, mediaType)
+        .then((data) => {
+          setResults(data.results.slice(0, 10));
+        })
+        .catch((err) => {
+          console.error("TMDB search error:", err);
+          setResults([]);
+        })
+        .finally(() => {
+          setSearching(false);
+        });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [query, mediaType]);
 
   const handleSelect = async (result: TMDBSearchResult) => {
     setSelectedId(result.id);
@@ -90,6 +103,8 @@ export default function TMDBFetchModal({
           : getYearFromDate(details.first_air_date);
 
       const genres = details.genres.map((g) => mapGenreToApp(g.name));
+      const countryCode = details.production_countries?.[0]?.iso_3166_1;
+      const category = inferCategory(mediaType, genres, countryCode);
 
       const tmdbResult: TMDBResult = {
         title: "title" in details ? details.title : details.name,
@@ -99,6 +114,7 @@ export default function TMDBFetchModal({
         year,
         rating: details.vote_average,
         genres,
+        category,
         type: mediaType,
       };
 
@@ -129,10 +145,14 @@ export default function TMDBFetchModal({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder={`Search ${mediaType === "movie" ? "movies" : "TV series"}...`}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
+          <Button type="button" onClick={handleSearch} variant="outline" size="sm">
+            Search
+          </Button>
         </div>
 
         {searching && (

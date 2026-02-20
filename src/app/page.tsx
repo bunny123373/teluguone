@@ -72,7 +72,30 @@ export default function Home() {
       <Navbar />
 
       {loading ? (
-        <div className="pv-hero-skeleton" />
+        <div className="pv-hero-skeleton">
+          <div className="pv-skeleton-logo">
+            <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="120" height="40" rx="4" fill="currentColor" className="skeleton-shimmer"/>
+            </svg>
+          </div>
+          <div className="pv-skeleton-hero-content">
+            <div className="pv-skeleton-hero-title" />
+            <div className="pv-skeleton-hero-meta">
+              <div className="pv-skeleton-meta-item" />
+              <div className="pv-skeleton-meta-item" />
+              <div className="pv-skeleton-meta-item" />
+            </div>
+            <div className="pv-skeleton-hero-desc">
+              <div className="pv-skeleton-desc-line" />
+              <div className="pv-skeleton-desc-line" />
+              <div className="pv-skeleton-desc-line short" />
+            </div>
+            <div className="pv-skeleton-hero-buttons">
+              <div className="pv-skeleton-btn" />
+              <div className="pv-skeleton-btn outline" />
+            </div>
+          </div>
+        </div>
       ) : featuredContent && !search ? (
         <HeroBanner content={featuredContent} />
       ) : null}

@@ -144,3 +144,23 @@ export function mapGenreToApp(genreName: string): string {
   };
   return genreMap[genreName] || genreName;
 }
+
+export function inferCategory(
+  mediaType: "movie" | "tv",
+  genres: string[],
+  countryCode?: string
+): string {
+  if (mediaType === "tv") {
+    return "Web Series";
+  }
+
+  const genreSet = new Set(genres.map((g) => g.toLowerCase()));
+  
+  if (countryCode && ["IN", "US", "GB"].includes(countryCode)) {
+    if (genreSet.has("animation")) {
+      return "Movies";
+    }
+  }
+  
+  return "Movies";
+}
