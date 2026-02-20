@@ -88,13 +88,13 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card border border-border rounded-2xl p-6 space-y-6"
+      className="bg-[#161f2e] rounded-lg p-6 space-y-6 border border-gray-800"
     >
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-secondary/20 flex items-center justify-center">
-          <Tv className="w-5 h-5 text-secondary" />
+        <div className="w-10 h-10 rounded-lg bg-[#e50914] flex items-center justify-center">
+          <Tv className="w-5 h-5 text-white" />
         </div>
-        <h2 className="text-xl font-bold text-text">Upload Web Series</h2>
+        <h2 className="text-xl font-bold text-white">Upload Web Series</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

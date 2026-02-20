@@ -71,32 +71,49 @@ export async function GET(request: NextRequest) {
 
 // POST /api/content - Create new content (admin only)
 export async function POST(request: NextRequest) {
+  let adminKey: string | null = null;
+  
   try {
-    const adminKey = request.headers.get("x-admin-key");
+    adminKey = request.headers.get("x-admin-key");
+    console.log("POST /api/content - Admin key present:", !!adminKey);
 
     if (adminKey !== process.env.ADMIN_KEY) {
+      console.log("Invalid admin key. Expected:", process.env.ADMIN_KEY, "Got:", adminKey);
       return createResponse(
         { success: false, error: "Unauthorized - Invalid admin key" },
         401
       );
     }
 
+    console.log("Connecting to DB...");
     await connectDB();
+    console.log("DB Connected");
 
     const body = await request.json();
+    console.log("Request body:", JSON.stringify(body).substring(0, 200));
+
+    if (!body.title || !body.poster) {
+      return createResponse(
+        { success: false, error: "Title and poster are required" },
+        400
+      );
+    }
 
     if (!body.slug) {
       body.slug = generateSlug(body.title);
     }
 
+    console.log("Creating content with slug:", body.slug);
     const content = await Content.create(body);
+    console.log("Content created with ID:", content._id);
 
     return createResponse(
       { success: true, data: content, message: "Content created successfully" },
       201
     );
-  } catch (error) {
-    console.error("Error creating content:", error);
-    return createResponse({ success: false, error: "Failed to create content" }, 500);
+  } catch (error: any) {
+    console.error("Full error:", error);
+    console.error("Error stack:", error.stack);
+    return createResponse({ success: false, error: error.message || "Failed to create content" }, 500);
   }
 }

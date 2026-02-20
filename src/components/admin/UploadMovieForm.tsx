@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Film, Upload, X, Database } from "lucide-react";
-import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import TMDBFetchModal from "./TMDBFetchModal";
@@ -83,30 +82,32 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card border border-border rounded-2xl p-6 space-y-6"
+      className="bg-[#161f2e] rounded-lg p-4 sm:p-6 space-y-6 border border-gray-800"
     >
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-          <Film className="w-5 h-5 text-primary" />
+      <div className="flex items-center gap-3 mb-4 sm:mb-6">
+        <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-[#00a8e1] flex items-center justify-center">
+          <Film className="w-4 sm:w-5 h-4 sm:h-5 text-white" />
         </div>
-        <h2 className="text-xl font-bold text-text">Upload Movie</h2>
+        <h2 className="text-lg sm:text-xl font-bold text-white">Upload Movie</h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {/* Title */}
         <div className="relative">
-          <Input
-            label="Title *"
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Title *</label>
+          <input
+            type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             placeholder="Enter movie title"
             required
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
           />
           <button
             type="button"
             onClick={() => setShowTMDbModal(true)}
-            className="absolute right-0 top-0 flex items-center gap-1 text-xs text-primary hover:text-primary/80"
+            className="absolute right-0 top-0 flex items-center gap-1 text-xs text-[#00a8e1] hover:text-[#00b9f1]"
           >
             <Database className="w-3 h-3" />
             Auto-fill
@@ -114,41 +115,53 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
         </div>
 
         {/* Year */}
-        <Input
-          label="Year"
-          name="year"
-          value={formData.year}
-          onChange={handleChange}
-          placeholder="e.g., 2024"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Year</label>
+          <input
+            type="text"
+            name="year"
+            value={formData.year}
+            onChange={handleChange}
+            placeholder="e.g., 2024"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
 
         {/* Poster URL */}
-        <Input
-          label="Poster URL *"
-          name="poster"
-          value={formData.poster}
-          onChange={handleChange}
-          placeholder="https://example.com/poster.jpg"
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Poster URL *</label>
+          <input
+            type="url"
+            name="poster"
+            value={formData.poster}
+            onChange={handleChange}
+            placeholder="https://example.com/poster.jpg"
+            required
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
 
         {/* Banner URL */}
-        <Input
-          label="Banner URL"
-          name="banner"
-          value={formData.banner}
-          onChange={handleChange}
-          placeholder="https://example.com/banner.jpg"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Banner URL</label>
+          <input
+            type="url"
+            name="banner"
+            value={formData.banner}
+            onChange={handleChange}
+            placeholder="https://example.com/banner.jpg"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
 
         {/* Language */}
         <div>
-          <label className="block text-sm font-medium text-text mb-1.5">Language</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Language</label>
           <select
             name="language"
             value={formData.language}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white focus:outline-none focus:border-[#00a8e1]"
           >
             <option value="">Select Language</option>
             {LANGUAGES.map((lang) => (
@@ -161,12 +174,12 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-text mb-1.5">Category</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white focus:outline-none focus:border-[#00a8e1]"
           >
             <option value="">Select Category</option>
             {CATEGORIES.map((cat) => (
@@ -179,12 +192,12 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
 
         {/* Genre */}
         <div>
-          <label className="block text-sm font-medium text-text mb-1.5">Genre</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Genre</label>
           <select
             name="genre"
             value={formData.genre}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white focus:outline-none focus:border-[#00a8e1]"
           >
             <option value="">Select Genre</option>
             {GENRES.map((g) => (
@@ -197,12 +210,12 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
 
         {/* Quality */}
         <div>
-          <label className="block text-sm font-medium text-text mb-1.5">Quality</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Quality</label>
           <select
             name="quality"
             value={formData.quality}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white focus:outline-none focus:border-[#00a8e1]"
           >
             <option value="">Select Quality</option>
             {QUALITIES.map((q) => (
@@ -214,54 +227,65 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
         </div>
 
         {/* Rating */}
-        <Input
-          label="Rating (0-10)"
-          name="rating"
-          type="number"
-          min="0"
-          max="10"
-          step="0.1"
-          value={formData.rating}
-          onChange={handleChange}
-          placeholder="e.g., 8.5"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Rating (0-10)</label>
+          <input
+            type="number"
+            name="rating"
+            min="0"
+            max="10"
+            step="0.1"
+            value={formData.rating}
+            onChange={handleChange}
+            placeholder="e.g., 8.5"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
 
         {/* Watch Link */}
-        <Input
-          label="Watch Link (MP4/M3U8)"
-          name="watchLink"
-          value={formData.watchLink}
-          onChange={handleChange}
-          placeholder="https://example.com/video.mp4"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Watch Link (MP4/M3U8)</label>
+          <input
+            type="url"
+            name="watchLink"
+            value={formData.watchLink}
+            onChange={handleChange}
+            placeholder="https://example.com/video.mp4"
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
 
         {/* Download Link */}
-        <Input
-          label="Download Link *"
-          name="downloadLink"
-          value={formData.downloadLink}
-          onChange={handleChange}
-          placeholder="https://drive.google.com/..."
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Download Link *</label>
+          <input
+            type="url"
+            name="downloadLink"
+            value={formData.downloadLink}
+            onChange={handleChange}
+            placeholder="https://drive.google.com/..."
+            required
+            className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
       </div>
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Description</label>
+        <label className="block text-sm font-medium text-gray-300 mb-1.5">Description</label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleChange}
           rows={4}
           placeholder="Enter movie description..."
-          className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+          className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1] resize-none"
         />
       </div>
 
       {/* Tags */}
       <div>
-        <label className="block text-sm font-medium text-text mb-1.5">Tags</label>
+        <label className="block text-sm font-medium text-gray-300 mb-1.5">Tags</label>
         <div className="flex gap-2">
           <input
             type="text"
@@ -269,34 +293,51 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
             onChange={(e) => setTagInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag())}
             placeholder="Add a tag and press Enter"
-            className="flex-1 px-4 py-2.5 rounded-xl bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="flex-1 px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
           />
-          <Button type="button" onClick={handleAddTag} variant="outline">
+          <button
+            type="button"
+            onClick={handleAddTag}
+            className="px-4 py-2.5 bg-[#222] hover:bg-[#333] text-white rounded-md border border-gray-700 transition-all"
+          >
             Add
-          </Button>
+          </button>
         </div>
         <div className="flex flex-wrap gap-2 mt-2">
           {formData.tags.map((tag) => (
-            <Badge key={tag} variant="primary" className="flex items-center gap-1">
+            <span
+              key={tag}
+              className="px-3 py-1 bg-[#00a8e1] text-white text-sm rounded-md flex items-center gap-1"
+            >
               {tag}
               <button
                 type="button"
                 onClick={() => handleRemoveTag(tag)}
-                className="hover:text-white"
+                className="hover:text-red-300"
               >
                 <X className="w-3 h-3" />
               </button>
-            </Badge>
+            </span>
           ))}
         </div>
       </div>
 
       {/* Submit */}
       <div className="flex justify-end pt-4">
-        <Button type="submit" size="lg" isLoading={isLoading} className="w-full sm:w-auto gap-2">
-          <Upload className="w-5 h-5" />
-          Upload Movie
-        </Button>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-[#00a8e1] hover:bg-[#00b9f1] text-white font-semibold rounded-md transition-all w-full sm:w-auto disabled:opacity-50"
+        >
+          {isLoading ? (
+            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+          ) : (
+            <>
+              <Upload className="w-5 h-5" />
+              Upload Movie
+            </>
+          )}
+        </button>
       </div>
 
       <TMDBFetchModal

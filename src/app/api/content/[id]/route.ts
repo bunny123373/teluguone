@@ -35,7 +35,6 @@ export async function GET(
     }
 
     if (!content) {
-      console.log("Content not found for ID:", id);
       return createResponse({ success: false, error: "Content not found" }, 404);
     }
 

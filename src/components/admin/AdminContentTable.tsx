@@ -3,8 +3,6 @@
 import Image from "next/image";
 import { Edit2, Trash2, Film, Tv } from "lucide-react";
 import { IContent } from "@/models/Content";
-import Badge from "@/components/ui/Badge";
-import { formatDate } from "@/utils/formatDate";
 
 interface AdminContentTableProps {
   content: IContent[];
@@ -19,50 +17,50 @@ export default function AdminContentTable({
 }: AdminContentTableProps) {
   if (content.length === 0) {
     return (
-      <div className="text-center py-12 bg-card rounded-2xl border border-border">
-        <p className="text-muted">No content found</p>
+      <div className="text-center py-12 bg-[#161f2e] rounded-lg border border-gray-800">
+        <p className="text-gray-400">No content found</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-card border border-border rounded-2xl overflow-hidden">
+    <div className="bg-[#161f2e] rounded-lg overflow-hidden border border-gray-800">
       {/* Desktop Table */}
       <div className="hidden md:overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-background border-b border-border">
+          <thead className="bg-[#0d1117] border-b border-gray-800">
             <tr>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Poster
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Title
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Type
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Language
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Category
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Created
               </th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-muted">
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-gray-800">
             {content.map((item) => (
               <tr
                 key={item._id.toString()}
-                className="hover:bg-background/50 transition-colors"
+                className="hover:bg-[#1f293a] transition-colors"
               >
                 <td className="px-4 py-3">
-                  <div className="relative w-12 h-16 rounded-lg overflow-hidden">
+                  <div className="relative w-12 h-16 rounded overflow-hidden">
                     <Image
                       src={item.poster}
                       alt={item.title}
@@ -73,55 +71,43 @@ export default function AdminContentTable({
                 </td>
                 <td className="px-4 py-3">
                   <div>
-                    <p className="text-text font-medium line-clamp-1">
+                    <p className="text-white font-medium line-clamp-1">
                       {item.title}
                     </p>
                     {item.year && (
-                      <p className="text-muted text-sm">{item.year}</p>
+                      <p className="text-gray-500 text-sm">{item.year}</p>
                     )}
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    {item.type === "movie" ? (
-                      <>
-                        <Film className="w-4 h-4 text-primary" />
-                        <span className="text-text text-sm">Movie</span>
-                      </>
-                    ) : (
-                      <>
-                        <Tv className="w-4 h-4 text-secondary" />
-                        <span className="text-text text-sm">Series</span>
-                      </>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <span className="text-text text-sm">
-                    {item.language || "-"}
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    item.type === "movie" 
+                      ? "bg-[#00a8e1] text-white" 
+                      : "bg-[#e50914] text-white"
+                  }`}>
+                    {item.type === "movie" ? "Movie" : "Series"}
                   </span>
                 </td>
-                <td className="px-4 py-3">
-                  <Badge variant="default" className="text-xs">
-                    {item.category || "-"}
-                  </Badge>
+                <td className="px-4 py-3 text-gray-300 text-sm">
+                  {item.language || "-"}
+                </td>
+                <td className="px-4 py-3 text-gray-300 text-sm">
+                  {item.category || "-"}
+                </td>
+                <td className="px-4 py-3 text-gray-500 text-sm">
+                  {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-"}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="text-muted text-sm">
-                    {formatDate(item.createdAt)}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex gap-2">
                     <button
                       onClick={() => onEdit(item)}
-                      className="p-2 rounded-lg hover:bg-primary/20 text-muted hover:text-primary transition-colors"
+                      className="p-2 bg-[#222] hover:bg-[#333] text-white rounded transition-colors"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onDelete(item)}
-                      className="p-2 rounded-lg hover:bg-red-500/20 text-muted hover:text-red-500 transition-colors"
+                      className="p-2 bg-red-500/20 hover:bg-red-500/40 text-red-400 rounded transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -133,14 +119,14 @@ export default function AdminContentTable({
         </table>
       </div>
 
-      {/* Mobile Card View */}
-      <div className="md:hidden divide-y divide-border">
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3 p-4">
         {content.map((item) => (
           <div
             key={item._id.toString()}
-            className="p-4 flex gap-4"
+            className="flex gap-4 p-3 bg-[#0d1117] rounded-lg border border-gray-800"
           >
-            <div className="relative w-20 h-28 rounded-lg overflow-hidden flex-shrink-0">
+            <div className="relative w-20 h-28 rounded overflow-hidden flex-shrink-0">
               <Image
                 src={item.poster}
                 alt={item.title}
@@ -149,27 +135,27 @@ export default function AdminContentTable({
               />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-text font-medium line-clamp-1">{item.title}</p>
-              {item.year && <p className="text-muted text-sm">{item.year}</p>}
-              <div className="flex items-center gap-2 mt-1">
-                {item.type === "movie" ? (
-                  <Film className="w-4 h-4 text-primary" />
-                ) : (
-                  <Tv className="w-4 h-4 text-secondary" />
-                )}
-                <span className="text-text text-sm capitalize">{item.type}</span>
+              <h3 className="text-white font-medium truncate">{item.title}</h3>
+              <p className="text-gray-500 text-sm">{item.year}</p>
+              <div className="flex gap-2 mt-2">
+                <span className={`px-2 py-1 rounded text-xs ${
+                  item.type === "movie" 
+                    ? "bg-[#00a8e1] text-white" 
+                    : "bg-[#e50914] text-white"
+                }`}>
+                  {item.type === "movie" ? "Movie" : "Series"}
+                </span>
               </div>
-              <p className="text-muted text-sm mt-1">{item.language || "-"}</p>
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex gap-2 mt-3">
                 <button
                   onClick={() => onEdit(item)}
-                  className="p-2 rounded-lg hover:bg-primary/20 text-muted hover:text-primary transition-colors"
+                  className="p-2 bg-[#222] hover:bg-[#333] text-white rounded"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => onDelete(item)}
-                  className="p-2 rounded-lg hover:bg-red-500/20 text-muted hover:text-red-500 transition-colors"
+                  className="p-2 bg-red-500/20 hover:bg-red-500/40 text-red-400 rounded"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

@@ -21,44 +21,44 @@ export default function AdminStats({ content }: AdminStatsProps) {
       label: "Total Movies",
       value: totalMovies,
       icon: Film,
-      color: "from-primary to-pink-600",
+      color: "bg-[#00a8e1]",
     },
     {
       label: "Total Series",
       value: totalSeries,
       icon: Tv,
-      color: "from-secondary to-blue-600",
+      color: "bg-[#e50914]",
     },
     {
       label: "Total Episodes",
       value: totalEpisodes,
       icon: PlayCircle,
-      color: "from-accent to-teal-600",
+      color: "bg-[#00a8e1]",
     },
     {
       label: "Trending",
       value: trendingCount,
       icon: TrendingUp,
-      color: "from-yellow-500 to-orange-600",
+      color: "bg-[#00a8e1]",
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-card border border-border rounded-xl p-4 sm:p-6"
+          className="bg-[#161f2e] rounded-lg p-3 sm:p-4 lg:p-6 border border-gray-800"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-muted text-xs sm:text-sm">{stat.label}</p>
-              <p className="text-2xl sm:text-3xl font-bold text-text mt-1">{stat.value}</p>
+              <p className="text-gray-400 text-xs sm:text-sm">{stat.label}</p>
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mt-1">{stat.value}</p>
             </div>
             <div
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}
+              className={`w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg ${stat.color} flex items-center justify-center`}
             >
-              <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
             </div>
           </div>
         </div>

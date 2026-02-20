@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Download, Film, Star, Calendar } from "lucide-react";
+import { ArrowLeft, Download, Star, Calendar } from "lucide-react";
 import { IContent } from "@/models/Content";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import VideoPlayer from "@/components/VideoPlayer";
 import ContentCard from "@/components/ContentCard";
-import Badge from "@/components/ui/Badge";
 
 interface WatchPageClientProps {
   id: string;
@@ -51,7 +50,7 @@ export default function WatchPageClient({ id }: WatchPageClientProps) {
         setRelatedMovies(
           data.data
             .filter((m: IContent) => m._id.toString() !== excludeId.toString())
-            .slice(0, 6)
+            .slice(0, 8)
         );
       }
     } catch (error) {
@@ -61,10 +60,10 @@ export default function WatchPageClient({ id }: WatchPageClientProps) {
 
   if (!movie) {
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-[#0d1117]">
         <Navbar />
         <div className="py-20 text-center">
-          <p className="text-muted text-lg">Loading...</p>
+          <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto"></div>
         </div>
         <Footer />
       </main>
@@ -72,15 +71,15 @@ export default function WatchPageClient({ id }: WatchPageClientProps) {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-[#0d1117]">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6">
         {/* Back Button */}
-        <div className="mb-6">
+        <div className="mb-4">
           <Link
             href={`/movie/${movie.slug || movie._id}`}
-            className="inline-flex items-center gap-2 text-muted hover:text-text transition-colors"
+            className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Movie Details
@@ -88,7 +87,7 @@ export default function WatchPageClient({ id }: WatchPageClientProps) {
         </div>
 
         {/* Video Player */}
-        <div className="mb-8">
+        <div className="mb-6">
           <VideoPlayer
             src={movie.watchLink || ""}
             downloadLink={movie.downloadLink}
@@ -96,65 +95,66 @@ export default function WatchPageClient({ id }: WatchPageClientProps) {
           />
         </div>
 
-        {/* Movie Info */}
-        <div
-          className="bg-card border border-border rounded-2xl p-6 mb-8"
-        >
+        {/* Movie Info - Prime Video Style */}
+        <div className="bg-[#161f2e] rounded-sm p-6 mb-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Badge variant="primary">Movie</Badge>
-                {movie.quality && <Badge variant="accent">{movie.quality}</Badge>}
-                {movie.language && <Badge variant="secondary">{movie.language}</Badge>}
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                <span className="px-3 py-1 bg-[#00a8e1] text-white text-xs font-semibold uppercase rounded-sm">Movie</span>
+                {movie.quality && (
+                  <span className="px-3 py-1 bg-black/50 text-white text-xs border border-white/30 rounded-sm">{movie.quality}</span>
+                )}
+                {movie.language && (
+                  <span className="px-3 py-1 bg-black/50 text-white text-xs border border-white/30 rounded-sm">{movie.language}</span>
+                )}
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-text mb-2">
+              
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
                 {movie.title}
               </h1>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted">
+              
+              {/* Meta */}
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
                 {movie.year && (
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>{movie.year}</span>
-                  </div>
+                  <span>{movie.year}</span>
                 )}
                 {movie.rating && (
                   <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500" />
-                    <span>{movie.rating}/10</span>
+                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                    <span className="text-white">{movie.rating}</span>
                   </div>
                 )}
               </div>
             </div>
+            
             {movie.downloadLink && (
               <a
                 href={movie.downloadLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-[#222] hover:bg-[#333] text-white rounded-sm border border-white/20 transition-all"
               >
-                <Download className="w-5 h-5" />
+                <Download className="w-4 h-4" />
                 Download
               </a>
             )}
           </div>
 
           {movie.description && (
-            <p className="text-muted mt-4 leading-relaxed">{movie.description}</p>
+            <p className="text-gray-300 mt-4 leading-relaxed text-sm md:text-base">
+              {movie.description}
+            </p>
           )}
         </div>
 
-        {/* Related Movies */}
+        {/* Related Movies - Horizontal Scroll */}
         {relatedMovies.length > 0 && (
-          <section className="py-8 md:py-10 mt-6">
-            <div className="flex items-center justify-between mb-4 md:mb-6 px-2">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text">Related Movies</h2>
-            </div>
-            <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
+          <section className="mb-12">
+            <h2 className="text-white font-semibold text-xl mb-6">Related Movies</h2>
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">
               {relatedMovies.map((item) => (
-                <div
-                  key={item._id.toString()}
-                  className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
-                >
+                <div key={item._id.toString()} className="flex-shrink-0 w-[140px] sm:w-[160px]">
                   <ContentCard content={item} />
                 </div>
               ))}

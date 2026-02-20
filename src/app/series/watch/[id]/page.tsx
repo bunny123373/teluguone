@@ -3,13 +3,11 @@
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { ArrowLeft, Tv, Star, Calendar, Download } from "lucide-react";
+import { ArrowLeft, Download, Play } from "lucide-react";
 import { IContent, IEpisode } from "@/models/Content";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import VideoPlayer from "@/components/VideoPlayer";
-import EpisodeList from "@/components/EpisodeList";
-import Badge from "@/components/ui/Badge";
 import ContentCard from "@/components/ContentCard";
 
 function SeriesWatchContent() {
@@ -66,7 +64,7 @@ function SeriesWatchContent() {
         setRelatedSeries(
           data.data
             .filter((s: IContent) => s._id.toString() !== excludeId.toString())
-            .slice(0, 6)
+            .slice(0, 8)
         );
       }
     } catch (error) {
@@ -81,111 +79,156 @@ function SeriesWatchContent() {
 
   if (!series) {
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-[#0d1117]">
         <Navbar />
         <div className="py-20 text-center">
-          <p className="text-muted text-lg">Redirecting...</p>
+          <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto"></div>
         </div>
+        <Footer />
       </main>
     );
   }
 
+  const currentSeasonIndex = seasonParam ? parseInt(seasonParam) : 0;
+  const currentSeason = series.seasons?.[currentSeasonIndex];
+
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-[#0d1117]">
       <Navbar />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6">
         {/* Back Button */}
-        <div
-          className="mb-6"
-        >
+        <div className="mb-4">
           <Link
             href={`/series/${series._id}`}
-            className="inline-flex items-center gap-2 text-muted hover:text-text transition-colors"
+            className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Series Details
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Video Player */}
-            <div
-              className="mb-6"
-            >
-              <VideoPlayer
-                src={currentEpisode?.watchLink || ""}
-                downloadLink={currentEpisode?.downloadLink || series.downloadLink}
-                title={currentEpisode?.episodeTitle || series.title}
-              />
-            </div>
+        {/* Video Player */}
+        <div className="mb-6">
+          <VideoPlayer
+            src={currentEpisode?.watchLink || ""}
+            downloadLink={currentEpisode?.downloadLink || series.downloadLink}
+            title={currentEpisode?.episodeTitle || series.title}
+          />
+        </div>
 
-            {/* Episode Info */}
-            <div
-              className="bg-card border border-border rounded-2xl p-6"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary">Web Series</Badge>
-                    {currentEpisode?.quality && (
-                      <Badge variant="accent">{currentEpisode.quality}</Badge>
-                    )}
-                  </div>
-                  <h1 className="text-xl md:text-2xl font-bold text-text mb-2">
-                    {series.title}
-                  </h1>
-                  {currentEpisode && (
-                    <p className="text-muted">
-                      Episode {currentEpisode.episodeNumber}: {currentEpisode.episodeTitle}
-                    </p>
-                  )}
-                </div>
-                {currentEpisode?.downloadLink && (
-                  <a
-                    href={currentEpisode.downloadLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors"
-                  >
-                    <Download className="w-5 h-5" />
-                    Download
-                  </a>
+        {/* Series Info - Prime Video Style */}
+        <div className="bg-[#161f2e] rounded-sm p-6 mb-8">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                <span className="px-3 py-1 bg-[#e50914] text-white text-xs font-semibold uppercase rounded-sm">Series</span>
+                {currentSeason && (
+                  <span className="px-3 py-1 bg-black/50 text-white text-xs border border-white/30 rounded-sm">
+                    Season {currentSeason.seasonNumber}
+                  </span>
+                )}
+                {currentEpisode?.quality && (
+                  <span className="px-3 py-1 bg-black/50 text-white text-xs border border-white/30 rounded-sm">{currentEpisode.quality}</span>
                 )}
               </div>
-            </div>
-          </div>
-
-          {/* Sidebar - Episode List */}
-          <div className="lg:col-span-1">
-            <div
-            >
-              <h3 className="text-lg font-semibold text-text mb-4">Episodes</h3>
-              {series.seasons && (
-                <EpisodeList
-                  seasons={series.seasons}
-                  currentEpisodeId={currentEpisode?.episodeNumber}
-                  onEpisodeSelect={handleEpisodeSelect}
-                />
+              
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                {series.title}
+              </h1>
+              
+              {currentEpisode && (
+                <p className="text-gray-400 text-sm mb-3">
+                  Episode {currentEpisode.episodeNumber}: {currentEpisode.episodeTitle || `Episode ${currentEpisode.episodeNumber}`}
+                </p>
               )}
             </div>
+            
+            {currentEpisode?.downloadLink && (
+              <a
+                href={currentEpisode.downloadLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 bg-[#222] hover:bg-[#333] text-white rounded-sm border border-white/20 transition-all"
+              >
+                <Download className="w-4 h-4" />
+                Download
+              </a>
+            )}
           </div>
         </div>
 
-        {/* Related Series */}
-        {relatedSeries.length > 0 && (
-          <section className="py-8 md:py-10 mt-6">
-            <div className="flex items-center justify-between mb-4 md:mb-6 px-2">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text">Related Series</h2>
-            </div>
-            <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
-              {relatedSeries.map((item, index) => (
-                <div
-                  key={item._id.toString()}
-                  className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
+        {/* Episodes List - Horizontal scroll */}
+        {series.seasons && series.seasons.length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-semibold">Episodes</h3>
+              {/* Season Selector */}
+              {series.seasons.length > 1 && (
+                <select
+                  value={currentSeasonIndex}
+                  onChange={(e) => {
+                    const seasonIndex = parseInt(e.target.value);
+                    const season = series.seasons?.[seasonIndex];
+                    if (season && season.episodes.length > 0) {
+                      setCurrentEpisode(season.episodes[0]);
+                    }
+                  }}
+                  className="px-4 py-2 bg-[#161f2e] border border-gray-600 text-white text-sm rounded-sm focus:outline-none focus:border-[#00a8e1]"
                 >
+                  {series.seasons.map((season, index) => (
+                    <option key={index} value={index}>
+                      Season {season.seasonNumber}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+            
+            <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">
+              {currentSeason?.episodes.map((episode) => (
+                <button
+                  key={episode.episodeNumber}
+                  onClick={() => handleEpisodeSelect(episode)}
+                  className={`flex-shrink-0 w-[160px] bg-[#161f2e] hover:bg-[#1f293a] rounded-sm overflow-hidden border transition-all ${
+                    currentEpisode?.episodeNumber === episode.episodeNumber
+                      ? "border-[#00a8e1]"
+                      : "border-gray-800 hover:border-gray-600"
+                  }`}
+                >
+                  <div className="aspect-video bg-[#0d1117] relative">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        currentEpisode?.episodeNumber === episode.episodeNumber
+                          ? "bg-[#00a8e1]"
+                          : "bg-black/60"
+                      }`}>
+                        <Play className="w-5 h-5 fill-white" />
+                      </div>
+                    </div>
+                    <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/70 text-white text-xs rounded">
+                      Ep {episode.episodeNumber}
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <p className="text-white text-sm truncate">
+                      {episode.episodeTitle || `Episode ${episode.episodeNumber}`}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Related Series - Horizontal Scroll */}
+        {relatedSeries.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-white font-semibold text-xl mb-6">Related Series</h2>
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">
+              {relatedSeries.map((item) => (
+                <div key={item._id.toString()} className="flex-shrink-0 w-[140px] sm:w-[160px]">
                   <ContentCard content={item} />
                 </div>
               ))}
@@ -202,11 +245,12 @@ function SeriesWatchContent() {
 export default function SeriesWatchPage() {
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-[#0d1117]">
         <Navbar />
         <div className="py-20 text-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto"></div>
         </div>
+        <Footer />
       </main>
     }>
       <SeriesWatchContent />

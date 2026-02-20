@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable");
+  console.warn("MONGODB_URI not defined");
 }
 
 interface Cached {
@@ -22,6 +22,10 @@ if (!global.mongooseCache) {
 }
 
 async function connectDB(): Promise<typeof mongoose> {
+  if (!MONGODB_URI) {
+    throw new Error("Please define the MONGODB_URI environment variable");
+  }
+  
   if (cached.conn) {
     return cached.conn;
   }
@@ -32,7 +36,11 @@ async function connectDB(): Promise<typeof mongoose> {
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log("MongoDB connected successfully");
       return mongoose;
+    }).catch((err) => {
+      console.error("MongoDB connection error:", err);
+      throw err;
     });
   }
 
@@ -40,6 +48,7 @@ async function connectDB(): Promise<typeof mongoose> {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
+    console.error("Failed to connect to MongoDB:", e);
     throw e;
   }
 

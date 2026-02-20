@@ -91,24 +91,24 @@ export default function SeasonEpisodeBuilder({
         {seasons.map((season, seasonIndex) => (
           <div
             key={seasonIndex}
-            className="bg-background rounded-xl border border-border overflow-hidden"
+            className="bg-[#0d1117] rounded-lg border border-gray-800 overflow-hidden"
           >
             <div
-              className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-white/5 transition-colors"
+              className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#161f2e] transition-colors"
               onClick={() =>
                 setExpandedSeason(expandedSeason === seasonIndex ? null : seasonIndex)
               }
             >
               <div className="flex items-center gap-3">
                 {expandedSeason === seasonIndex ? (
-                  <ChevronUp className="w-5 h-5 text-muted" />
+                  <ChevronUp className="w-5 h-5 text-gray-400" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-muted" />
+                  <ChevronDown className="w-5 h-5 text-gray-400" />
                 )}
-                <span className="font-medium text-text">
+                <span className="font-medium text-white">
                   Season {season.seasonNumber}
                 </span>
-                <span className="text-sm text-muted">
+                <span className="text-sm text-gray-500">
                   ({season.episodes.length} episodes)
                 </span>
               </div>
@@ -118,17 +118,17 @@ export default function SeasonEpisodeBuilder({
                   e.stopPropagation();
                   handleRemoveSeason(seasonIndex);
                 }}
-                className="p-1.5 rounded-lg hover:bg-red-500/20 text-muted hover:text-red-500 transition-colors"
+                className="p-1.5 rounded-lg hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
 
             {expandedSeason === seasonIndex && (
-              <div className="border-t border-border">
+              <div className="border-t border-gray-800">
                 <div className="p-4 space-y-4">
                   {season.episodes.length === 0 && (
-                    <p className="text-muted text-sm text-center py-4">
+                    <p className="text-gray-500 text-sm text-center py-4">
                       No episodes in this season
                     </p>
                   )}
@@ -136,7 +136,7 @@ export default function SeasonEpisodeBuilder({
                   {season.episodes.map((episode, episodeIndex) => (
                     <div
                       key={episodeIndex}
-                      className="bg-card rounded-xl p-4 space-y-3"
+                      className="bg-[#161f2e] rounded-lg p-4 space-y-3"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
