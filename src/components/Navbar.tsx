@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setSearch, setTypeFilter, clearFilters } from "@/redux/slices/uiSlice";
 import { Search, Menu, X, Film, Tv, Home } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { TYPE_FILTERS } from "@/utils/constants";
 
 export default function Navbar() {
@@ -14,117 +13,87 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <Film className="w-5 h-5 text-white" />
+    <nav className="pv-navbar">
+      <div className="pv-nav-container">
+        <div className="pv-nav-left">
+          <Link href="/" className="pv-logo">
+            <div className="pv-logo-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
+                <path d="M24 4L4 14v20l20 10 20-10V14L24 4z" fill="#00A8E1"/>
+                <path d="M24 4L4 14v20l20 10 20-10V14L24 4z" stroke="#fff" strokeWidth="2"/>
+                <polygon points="20,18 32,24 20,30" fill="#fff"/>
+              </svg>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              TeluguDB
-            </span>
+            <span className="pv-logo-text">prime video</span>
           </Link>
 
-          {/* Desktop Search */}
-          <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-              <input
-                type="text"
-                placeholder="Search movies, series..."
-                value={search}
-                onChange={(e) => dispatch(setSearch(e.target.value))}
-                className="w-full pl-10 pr-4 py-2 rounded-xl bg-card border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
-              />
-              {search && (
-                <button
-                  onClick={() => dispatch(setSearch(""))}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                >
-                  <X className="w-4 h-4 text-muted hover:text-text" />
-                </button>
-              )}
-            </div>
+          <div className="pv-nav-links">
+            <Link href="/" className="pv-nav-link">
+              Home
+            </Link>
+            <Link href="/movie" className="pv-nav-link">
+              Movies
+            </Link>
+            <Link href="/series" className="pv-nav-link">
+              TV Shows
+            </Link>
           </div>
+        </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
-            {TYPE_FILTERS.map((filter) => (
+        <div className="pv-nav-right">
+          <div className="pv-search-container">
+            <Search className="pv-search-icon" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={search}
+              onChange={(e) => dispatch(setSearch(e.target.value))}
+              className="pv-search-input"
+            />
+            {search && (
               <button
-                key={filter.value}
-                onClick={() => dispatch(setTypeFilter(filter.value as any))}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                  typeFilter === filter.value
-                    ? "bg-primary text-white"
-                    : "text-muted hover:text-text hover:bg-card"
-                }`}
+                onClick={() => dispatch(setSearch(""))}
+                className="pv-search-clear"
               >
-                {filter.label}
+                <X className="w-4 h-4" />
               </button>
-            ))}
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-xl hover:bg-card transition-colors"
+            className="pv-menu-btn"
           >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-text" />
-            ) : (
-              <Menu className="w-6 h-6 text-text" />
-            )}
+            <Menu className="w-6 h-6" />
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-card"
-          >
-            <div className="px-4 py-4 space-y-4">
-              {/* Mobile Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-                <input
-                  type="text"
-                  placeholder="Search movies, series..."
-                  value={search}
-                  onChange={(e) => dispatch(setSearch(e.target.value))}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
-              </div>
-
-              {/* Mobile Filters */}
-              <div className="flex flex-wrap gap-2">
-                {TYPE_FILTERS.map((filter) => (
-                  <button
-                    key={filter.value}
-                    onClick={() => {
-                      dispatch(setTypeFilter(filter.value as any));
-                      setIsMenuOpen(false);
-                    }}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                      typeFilter === filter.value
-                        ? "bg-primary text-white"
-                        : "text-muted hover:text-text bg-background"
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isMenuOpen && (
+        <div className="pv-mobile-menu">
+          <div className="pv-mobile-search">
+            <Search className="w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search"
+              value={search}
+              onChange={(e) => dispatch(setSearch(e.target.value))}
+              className="pv-mobile-search-input"
+            />
+          </div>
+          <div className="pv-mobile-links">
+            <Link href="/" className="pv-mobile-link" onClick={() => setIsMenuOpen(false)}>
+              Home
+            </Link>
+            <Link href="/movie" className="pv-mobile-link" onClick={() => setIsMenuOpen(false)}>
+              Movies
+            </Link>
+            <Link href="/series" className="pv-mobile-link" onClick={() => setIsMenuOpen(false)}>
+              TV Shows
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

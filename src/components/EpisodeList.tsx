@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Play, Download, ChevronDown } from "lucide-react";
 import { ISeason, IEpisode } from "@/models/Content";
 import Badge from "./ui/Badge";
@@ -41,42 +40,32 @@ export default function EpisodeList({
             />
           </button>
 
-          <AnimatePresence>
-            {isDropdownOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl z-10"
-              >
-                {seasons.map((season, index) => (
-                  <button
-                    key={season.seasonNumber}
-                    onClick={() => {
-                      setSelectedSeason(index);
-                      setIsDropdownOpen(false);
-                    }}
-                    className={`w-full px-4 py-3 text-left hover:bg-background transition-colors first:rounded-t-xl last:rounded-b-xl ${
-                      selectedSeason === index ? "bg-background text-primary" : "text-text"
-                    }`}
-                  >
-                    Season {season.seasonNumber}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl z-10">
+              {seasons.map((season, index) => (
+                <button
+                  key={season.seasonNumber}
+                  onClick={() => {
+                    setSelectedSeason(index);
+                    setIsDropdownOpen(false);
+                  }}
+                  className={`w-full px-4 py-3 text-left hover:bg-background transition-colors first:rounded-t-xl last:rounded-b-xl ${
+                    selectedSeason === index ? "bg-background text-primary" : "text-text"
+                  }`}
+                >
+                  Season {season.seasonNumber}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Episode List */}
       <div className="max-h-[400px] overflow-y-auto">
         {currentSeason?.episodes.map((episode, index) => (
-          <motion.div
+          <div
             key={episode.episodeNumber}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
             onClick={() => onEpisodeSelect(episode)}
             className={`p-4 border-b border-border last:border-b-0 cursor-pointer hover:bg-background/50 transition-colors ${
               currentEpisodeId === episode.episodeNumber
@@ -128,7 +117,7 @@ export default function EpisodeList({
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

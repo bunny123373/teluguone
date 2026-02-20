@@ -22,14 +22,20 @@ export async function OPTIONS() {
 // GET /api/content/[id] - Get single content (public)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await connectDB();
 
-    const content = await Content.findById(params.id);
+    let content = await Content.findById(id);
 
     if (!content) {
+      content = await Content.findOne({ slug: id });
+    }
+
+    if (!content) {
+      console.log("Content not found for ID:", id);
       return createResponse({ success: false, error: "Content not found" }, 404);
     }
 

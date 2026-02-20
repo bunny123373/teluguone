@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Eye, EyeOff, LayoutDashboard, Film, Tv, List } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -238,17 +237,13 @@ export default function AdminPage() {
   if (!isAuthenticated) {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
-        >
-          <div className="bg-card border border-border rounded-2xl p-8">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-8 h-8 text-white" />
+        <div className="w-full max-w-md">
+          <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-text mb-2">Admin Access</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-text mb-2">Admin Access</h1>
               <p className="text-muted text-sm">
                 Enter your admin key to access the dashboard
               </p>
@@ -285,7 +280,7 @@ export default function AdminPage() {
               </Button>
             </form>
           </div>
-        </motion.div>
+        </div>
       </main>
     );
   }
@@ -297,73 +292,49 @@ export default function AdminPage() {
       onTabChange={setActiveTab}
       onLogout={handleLogout}
     >
-      <AnimatePresence mode="wait">
-        {activeTab === "dashboard" && (
-          <motion.div
-            key="dashboard"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="space-y-8"
-          >
-            <div>
-              <h1 className="text-2xl font-bold text-text mb-2">Dashboard</h1>
-              <p className="text-muted">Overview of your content library</p>
-            </div>
-            <AdminStats content={content} />
-          </motion.div>
-        )}
+      {activeTab === "dashboard" && (
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-2xl font-bold text-text mb-2">Dashboard</h1>
+            <p className="text-muted">Overview of your content library</p>
+          </div>
+          <AdminStats content={content} />
+        </div>
+      )}
 
-        {activeTab === "upload-movie" && (
-          <motion.div
-            key="upload-movie"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-text mb-2">Upload Movie</h1>
-              <p className="text-muted">Add a new movie to your library</p>
-            </div>
-            <UploadMovieForm onSubmit={handleUploadMovie} isLoading={isLoading} />
-          </motion.div>
-        )}
+      {activeTab === "upload-movie" && (
+        <div>
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-text mb-2">Upload Movie</h1>
+            <p className="text-muted">Add a new movie to your library</p>
+          </div>
+          <UploadMovieForm onSubmit={handleUploadMovie} isLoading={isLoading} />
+        </div>
+      )}
 
-        {activeTab === "upload-series" && (
-          <motion.div
-            key="upload-series"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-text mb-2">Upload Series</h1>
-              <p className="text-muted">Add a new web series with seasons and episodes</p>
-            </div>
-            <UploadSeriesForm onSubmit={handleUploadSeries} isLoading={isLoading} />
-          </motion.div>
-        )}
+      {activeTab === "upload-series" && (
+        <div>
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-text mb-2">Upload Series</h1>
+            <p className="text-muted">Add a new web series with seasons and episodes</p>
+          </div>
+          <UploadSeriesForm onSubmit={handleUploadSeries} isLoading={isLoading} />
+        </div>
+      )}
 
-        {activeTab === "manage" && (
-          <motion.div
-            key="manage"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="space-y-6"
-          >
-            <div>
-              <h1 className="text-2xl font-bold text-text mb-2">Manage Content</h1>
-              <p className="text-muted">Edit or delete existing content</p>
-            </div>
-            <AdminContentTable
-              content={content}
-              onEdit={handleEdit}
-              onDelete={handleDeleteClick}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {activeTab === "manage" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold text-text mb-2">Manage Content</h1>
+            <p className="text-muted">Edit or delete existing content</p>
+          </div>
+          <AdminContentTable
+            content={content}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+          />
+        </div>
+      )}
 
       {/* Edit Modal */}
       <EditContentModal

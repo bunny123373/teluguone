@@ -16,6 +16,7 @@ export interface ISeason {
 export interface IContent extends Document {
   type: "movie" | "series";
   title: string;
+  slug: string;
   poster: string;
   banner?: string;
   description?: string;
@@ -50,6 +51,7 @@ const ContentSchema: Schema = new Schema(
   {
     type: { type: String, required: true, enum: ["movie", "series"] },
     title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
     poster: { type: String, required: true },
     banner: { type: String },
     description: { type: String },

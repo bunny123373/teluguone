@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Film, Upload, X } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -57,9 +56,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
   };
 
   return (
-    <motion.form
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+    <form
       onSubmit={handleSubmit}
       className="bg-card border border-border rounded-2xl p-6 space-y-6"
     >
@@ -261,11 +258,11 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
 
       {/* Submit */}
       <div className="flex justify-end pt-4">
-        <Button type="submit" size="lg" isLoading={isLoading} className="gap-2">
+        <Button type="submit" size="lg" isLoading={isLoading} className="w-full sm:w-auto gap-2">
           <Upload className="w-5 h-5" />
           Upload Movie
         </Button>
       </div>
-    </motion.form>
+    </form>
   );
 }

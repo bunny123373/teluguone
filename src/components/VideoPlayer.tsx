@@ -8,7 +8,6 @@ import {
   VolumeX, 
   Maximize, 
   Download, 
-  Settings,
   PictureInPicture,
   SkipBack,
   SkipForward,
@@ -31,6 +30,7 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isBuffering, setIsBuffering] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -46,7 +46,58 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
     ? QUALITIES.filter(q => sources.some(s => s.quality === q)).map(q => ({ quality: q, url: sources.find(s => s.quality === q)!.url }))
     : src ? [{ quality: "Auto", url: src }] : [];
 
+  const isDirectVideo = (url: string) => {
+    if (!url) return false;
+    return url.match(/\.(mp4|webm|m3u8)$/i) !== null ||
+           url.includes('bunny.net') ||
+           url.includes('cdn.video') ||
+           url.includes('videos.com') ||
+           url.includes('bit.ly');
+  };
+
+  const isEmbedUrl = (url: string) => {
+    if (!url) return false;
+    return url.includes('/embed/') || 
+           url.includes('archive.org/embed') ||
+           url.includes('streamtape.com') ||
+           url.includes('doodstream.com') ||
+           url.includes('vidguard.xyz') ||
+           url.includes('filemoon.sx') ||
+           url.includes('streamwish.com') ||
+           url.includes('vidoza.net') ||
+           !url.match(/\.(mp4|webm|m3u8)$/i);
+  };
+
+  const isArchiveOrg = (url: string) => {
+    return url && url.includes('archive.org') && !url.includes('/embed/') && !url.includes('/download/');
+  };
+
+  const convertToEmbed = (url: string): string => {
+    if (!url) return url;
+    
+    if (url.includes('streamtape.com') && !url.includes('/embed/')) {
+      const match = url.match(/streamtape\.com\/[e]\/([a-zA-Z0-9]+)/);
+      if (match) return `https://streamtape.com/embed/${match[1]}`;
+      return url;
+    }
+    
+    if (url.includes('doodstream.com') && !url.includes('/embed/')) {
+      const match = url.match(/doodstream\.com\/[e]\/([a-zA-Z0-9]+)/);
+      if (match) return `https://doodstream.com/embed/${match[1]}`;
+      return url;
+    }
+    
+    if (url.includes('vidguard.xyz') && !url.includes('/embed/')) {
+      const match = url.match(/vidguard\.xyz\/([a-zA-Z0-9]+)/);
+      if (match) return `https://vidguard.xyz/embed/${match[1]}`;
+      return url;
+    }
+    
+    return url;
+  };
+
   const currentSrc = videoSources.find(s => s.quality === currentQuality)?.url || videoSources[0]?.url || "";
+  const videoSrc = src || "";
 
   const formatTime = (time: number) => {
     if (!time || isNaN(time)) return "0:00";
@@ -83,9 +134,18 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
     if (!video) return;
 
     const handleLoadStart = () => setIsLoading(true);
-    const handleCanPlay = () => setIsLoading(false);
+    const handleCanPlay = () => {
+      setIsLoading(false);
+      setIsBuffering(false);
+    };
+    const handleWaiting = () => setIsBuffering(true);
+    const handlePlaying = () => {
+      setIsBuffering(false);
+      setIsLoading(false);
+    };
     const handleError = () => {
       setIsLoading(false);
+      setIsBuffering(false);
       setError("Failed to load video. Please try again.");
     };
     const handleTimeUpdate = () => {
@@ -107,6 +167,8 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
 
     video.addEventListener("loadstart", handleLoadStart);
     video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("waiting", handleWaiting);
+    video.addEventListener("playing", handlePlaying);
     video.addEventListener("error", handleError);
     video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -117,6 +179,8 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
     return () => {
       video.removeEventListener("loadstart", handleLoadStart);
       video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("waiting", handleWaiting);
+      video.removeEventListener("playing", handlePlaying);
       video.removeEventListener("error", handleError);
       video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
@@ -129,7 +193,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
     };
   }, []);
 
-  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const video = videoRef.current;
@@ -269,10 +332,71 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
   const skipBack = () => skip(-10);
   const skipForward = () => skip(10);
 
-  if (!src) {
+  if (!videoSrc && (!sources || sources.length === 0)) {
     return (
       <div className="relative w-full aspect-video bg-card rounded-2xl flex flex-col items-center justify-center border border-border">
         <div className="text-muted text-lg mb-4">Watch link not available</div>
+        {downloadLink && (
+          <a href={downloadLink} target="_blank" rel="noopener noreferrer">
+            <Button variant="primary" className="gap-2">
+              <Download className="w-4 h-4" />
+              Download Instead
+            </Button>
+          </a>
+        )}
+      </div>
+    );
+  }
+
+  if (isEmbedUrl(videoSrc)) {
+    const embedSrc = convertToEmbed(videoSrc);
+    return (
+      <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden">
+        <iframe
+          src={embedSrc}
+          width="100%"
+          height="100%"
+          allowFullScreen
+          allow="autoplay; fullscreen"
+          scrolling="no"
+          style={{ border: 0 }}
+        />
+      </div>
+    );
+  }
+
+  if (isArchiveOrg(videoSrc)) {
+    const embedUrl = `https://archive.org/embed/${videoSrc.split('/download/')[1]?.split('/')[0] || ''}`;
+    return (
+      <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden">
+        <iframe
+          src={embedUrl}
+          width="100%"
+          height="100%"
+          allowFullScreen
+          allow="autoplay; fullscreen"
+          scrolling="no"
+          style={{ border: 0 }}
+        />
+        {downloadLink && (
+          <a
+            href={downloadLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors z-10"
+          >
+            <Download className="w-4 h-4" />
+            Download
+          </a>
+        )}
+      </div>
+    );
+  }
+
+  if (!isDirectVideo(videoSrc)) {
+    return (
+      <div className="relative w-full aspect-video bg-card rounded-2xl flex flex-col items-center justify-center border border-border">
+        <div className="text-muted text-lg mb-4">Invalid video URL</div>
         {downloadLink && (
           <a href={downloadLink} target="_blank" rel="noopener noreferrer">
             <Button variant="primary" className="gap-2">
@@ -293,38 +417,44 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
       onMouseLeave={() => isPlaying && setShowControls(false)}
       onTouchStart={resetControlsTimeout}
     >
-      {/* Video Element */}
       <div className="relative w-full aspect-video bg-black">
         <video
           ref={videoRef}
-          src={currentSrc}
+          src={videoSrc}
           className="w-full h-full"
           onClick={togglePlay}
           playsInline
-          preload="metadata"
+          preload="auto"
         />
 
-        {/* Loading Spinner */}
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+        {(isLoading || isBuffering) && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 z-10">
             <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <span className="text-white text-sm mt-2">
+              {isBuffering ? "Buffering..." : "Loading..."}
+            </span>
           </div>
         )}
 
-        {/* Error Message */}
         {error && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/80">
             <div className="text-center">
               <p className="text-red-500 mb-4">{error}</p>
-              <Button onClick={() => { setError(null); videoRef.current?.load(); }} variant="outline">
-                Retry
-              </Button>
+              <div className="flex gap-2 justify-center">
+                <Button onClick={() => { setError(null); videoRef.current?.load(); }} variant="outline">
+                  Retry
+                </Button>
+                {downloadLink && (
+                  <a href={downloadLink} target="_blank" rel="noopener noreferrer">
+                    <Button variant="primary">Download</Button>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         )}
 
-        {/* Big Play Button Overlay */}
-        {!isPlaying && !isLoading && !error && (
+        {!isPlaying && !isLoading && !isBuffering && !error && (
           <div 
             className="absolute inset-0 flex items-center justify-center cursor-pointer"
             onClick={togglePlay}
@@ -336,13 +466,11 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
         )}
       </div>
 
-      {/* Controls */}
       <div 
         className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-3 md:p-4 transition-opacity duration-300 ${
           showControls ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Progress Bar */}
         <div className="mb-3 group/progress">
           <div className="relative h-1 bg-white/20 rounded-full overflow-hidden cursor-pointer group-hover/progress:h-2 transition-all">
             <div 
@@ -360,11 +488,8 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
           </div>
         </div>
 
-        {/* Control Buttons */}
         <div className="flex items-center justify-between gap-2">
-          {/* Left Controls */}
           <div className="flex items-center gap-1 md:gap-2">
-            {/* Skip Back */}
             <button
               onClick={skipBack}
               className="p-2 rounded-lg hover:bg-white/10 transition-colors hidden sm:flex"
@@ -373,7 +498,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
               <SkipBack className="w-5 h-5 text-white" />
             </button>
 
-            {/* Play/Pause */}
             <button
               onClick={togglePlay}
               className="w-10 h-10 rounded-full bg-primary flex items-center justify-center hover:bg-primary/80 transition-colors"
@@ -386,7 +510,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
               )}
             </button>
 
-            {/* Skip Forward */}
             <button
               onClick={skipForward}
               className="p-2 rounded-lg hover:bg-white/10 transition-colors hidden sm:flex"
@@ -395,7 +518,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
               <SkipForward className="w-5 h-5 text-white" />
             </button>
 
-            {/* Volume */}
             <div 
               className="relative flex items-center"
               onMouseEnter={() => setShowVolumeSlider(true)}
@@ -413,7 +535,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
                 )}
               </button>
 
-              {/* Volume Slider */}
               <div 
                 className={`absolute left-full ml-2 flex items-center bg-black/80 rounded-lg p-2 transition-all duration-300 ${
                   showVolumeSlider ? "opacity-100 w-24" : "opacity-0 w-0 overflow-hidden"
@@ -426,12 +547,11 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
                   step="0.1"
                   value={isMuted ? 0 : volume}
                   onChange={handleVolumeChange}
-                  className="w-full h-1 bg-white/30 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full"
+                  className="w-full h-1 bg-white/30 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
             </div>
 
-            {/* Time Display */}
             <div className="text-white text-xs md:text-sm ml-2 font-medium">
               <span className="text-white/90">{formatTime(currentTime)}</span>
               <span className="text-white/50 mx-1">/</span>
@@ -439,9 +559,7 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
             </div>
           </div>
 
-          {/* Right Controls */}
           <div className="flex items-center gap-1 md:gap-2">
-            {/* Quality Selector */}
             {videoSources.length > 1 && (
               <div className="relative">
                 <button
@@ -472,7 +590,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
               </div>
             )}
 
-            {/* PiP */}
             <button
               onClick={togglePiP}
               className="p-2 rounded-lg hover:bg-white/10 transition-colors hidden md:flex"
@@ -481,7 +598,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
               <PictureInPicture className="w-5 h-5 text-white" />
             </button>
 
-            {/* Download */}
             {downloadLink && (
               <a
                 href={downloadLink}
@@ -494,7 +610,6 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
               </a>
             )}
 
-            {/* Fullscreen */}
             <button
               onClick={toggleFullscreen}
               className="p-2 rounded-lg hover:bg-white/10 transition-colors"

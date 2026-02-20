@@ -5,8 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setContent } from "@/redux/slices/contentSlice";
 import Navbar from "@/components/Navbar";
 import HeroBanner from "@/components/HeroBanner";
-import ContentGrid from "@/components/ContentGrid";
-import ContentCard from "@/components/ContentCard";
+import ContentRow from "@/components/ContentRow";
 import Footer from "@/components/Footer";
 import { IContent } from "@/models/Content";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -14,16 +13,17 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function Home() {
   const dispatch = useAppDispatch();
   const { list: content } = useAppSelector((state) => state.content);
-  const { search, typeFilter } = useAppSelector((state) => state.ui);
+  const { search } = useAppSelector((state) => state.ui);
   const [featuredContent, setFeaturedContent] = useState<IContent | null>(null);
   const [allContent, setAllContent] = useState<IContent[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchContent();
   }, []);
 
   const fetchContent = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/content");
       const data = await response.json();
@@ -37,71 +37,86 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Error fetching content:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const displayContent = allContent.length > 0 ? allContent : content;
+  const getContentByCategory = (filter: (item: IContent) => boolean) => {
+    return allContent.filter(filter).slice(0, 20);
+  };
 
-  // Filter content based on search, type filter and category
-  const filteredContent = displayContent.filter((item) => {
-    const matchesSearch =
-      !search ||
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.description?.toLowerCase().includes(search.toLowerCase()) ||
-      item.tags?.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
+  const categorySections = [
+    { title: "Latest Movies", key: "latest", filter: (item: IContent) => item.type === "movie" },
+    { title: "Trending Now", key: "trending", filter: (item: IContent) => item.type === "movie" && item.rating != null && parseFloat(String(item.rating)) >= 7 },
+    { title: "Telugu Hits", key: "telugu", filter: (item: IContent) => item.language?.toLowerCase() === "telugu" },
+    { title: "Hindi Movies", key: "hindi", filter: (item: IContent) => item.language?.toLowerCase() === "hindi" },
+    { title: "Tamil Movies", key: "tamil", filter: (item: IContent) => item.language?.toLowerCase() === "tamil" },
+    { title: "English Movies", key: "english", filter: (item: IContent) => item.language?.toLowerCase() === "english" },
+    { title: "Web Series", key: "webseries", filter: (item: IContent) => item.type === "series" || item.category?.toLowerCase() === "web series" },
+    { title: "Action Pack", key: "action", filter: (item: IContent) => item.genre?.toLowerCase() === "action" },
+    { title: "Drama Movies", key: "drama", filter: (item: IContent) => item.genre?.toLowerCase() === "drama" },
+    { title: "Comedy Movies", key: "comedy", filter: (item: IContent) => item.genre?.toLowerCase() === "comedy" },
+  ];
 
-    const matchesType =
-      typeFilter === "all" || item.type === typeFilter;
-
-    const matchesCategory =
-      selectedCategory === "All" ||
-      item.category?.toLowerCase() === selectedCategory.toLowerCase() ||
-      item.genre?.toLowerCase() === selectedCategory.toLowerCase();
-
-    return matchesSearch && matchesType && matchesCategory;
-  });
-
-  const categories = ["All", "Trending", "Latest", "Telugu", "Hindi", "Tamil", "English", "Web Series", "Action", "Comedy", "Drama", "Thriller"];
+  const searchResults = search 
+    ? allContent.filter((item) =>
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.description?.toLowerCase().includes(search.toLowerCase()) ||
+        item.tags?.some((tag) => tag.toLowerCase().includes(search.toLowerCase()))
+      )
+    : [];
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen pv-bg">
       <Navbar />
 
-      {/* Hero Banner */}
-      {featuredContent && !search && typeFilter === "all" && (
+      {loading ? (
+        <div className="pv-hero-skeleton" />
+      ) : featuredContent && !search ? (
         <HeroBanner content={featuredContent} />
-      )}
+      ) : null}
 
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
-        {/* Mobile Category Filter */}
-        <div className="mb-4 overflow-x-auto flex gap-2 pb-2 scrollbar-hide">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm flex-shrink-0 ${
-                selectedCategory === cat
-                  ? "bg-primary text-white"
-                  : "bg-card text-muted hover:text-text"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Content Area */}
-        <div>
-          {allContent.length > 0 ? (
-            <>
-              <h2 className="text-lg sm:text-xl font-bold text-text mb-4">
-                {selectedCategory === "All" ? "All Content" : selectedCategory}
-                <span className="text-muted text-sm font-normal ml-2">({filteredContent.length} items)</span>
-              </h2>
-              <ContentGrid title="" content={filteredContent} />
-            </>
-          ) : null}
-        </div>
+      <div className="pv-content">
+        {loading ? (
+          <div className="pv-rows-container">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="pv-row-skeleton">
+                <div className="pv-skeleton-title" />
+                <div className="pv-skeleton-cards">
+                  {[1, 2, 3, 4, 5, 6].map((j) => (
+                    <div key={j} className="pv-skeleton-card" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : search ? (
+          <div className="pv-search-section">
+            <h2 className="pv-section-title">
+              Search Results ({searchResults.length})
+            </h2>
+            {searchResults.length > 0 ? (
+              <ContentRow content={searchResults} />
+            ) : (
+              <p className="pv-no-results">No results found for "{search}"</p>
+            )}
+          </div>
+        ) : (
+          <div className="pv-rows-container">
+            {categorySections.map((section) => {
+              const sectionContent = getContentByCategory(section.filter);
+              if (sectionContent.length === 0) return null;
+              return (
+                <ContentRow 
+                  key={section.key} 
+                  title={section.title} 
+                  content={sectionContent} 
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <Footer />

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { Play, Star, Calendar, Globe, ArrowLeft, Tv, ChevronRight } from "lucide-react";
 import { IContent, IEpisode } from "@/models/Content";
 import Navbar from "@/components/Navbar";
@@ -66,10 +65,10 @@ export default function SeriesDetailsPage() {
 
   if (!series) {
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen pv-bg">
         <Navbar />
         <div className="py-20 text-center">
-          <p className="text-muted text-lg">Redirecting...</p>
+          <p className="pv-no-results">Redirecting...</p>
         </div>
       </main>
     );
@@ -82,7 +81,7 @@ export default function SeriesDetailsPage() {
   );
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen pv-bg">
       <Navbar />
 
       {/* Banner Background */}
@@ -100,9 +99,7 @@ export default function SeriesDetailsPage() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-48 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
           {/* Poster */}
@@ -184,7 +181,7 @@ export default function SeriesDetailsPage() {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4 pt-4">
-              <Link href={`/series/watch/${series._id}`}>
+              <Link href={`/series/watch/${series.slug || series._id}`}>
                 <Button size="lg" className="gap-2">
                   <Play className="w-5 h-5" />
                   Watch Now
@@ -192,7 +189,7 @@ export default function SeriesDetailsPage() {
               </Link>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Episodes Section */}
         {currentSeason && (
@@ -217,11 +214,8 @@ export default function SeriesDetailsPage() {
 
             <div className="space-y-3">
               {currentSeason.episodes.map((episode, index) => (
-                <motion.div
+                <div
                   key={episode.episodeNumber}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   className="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-colors"
                 >
                   <div className="flex items-center gap-4">
@@ -241,7 +235,7 @@ export default function SeriesDetailsPage() {
                       )}
                     </div>
                     <Link
-                      href={`/series/watch/${series._id}?season=${selectedSeason}&episode=${episode.episodeNumber}`}
+                      href={`/series/watch/${series.slug || series._id}?season=${selectedSeason}&episode=${episode.episodeNumber}`}
                     >
                       <Button size="sm" className="gap-1">
                         <Play className="w-4 h-4" />
@@ -249,7 +243,7 @@ export default function SeriesDetailsPage() {
                       </Button>
                     </Link>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>
@@ -264,15 +258,12 @@ export default function SeriesDetailsPage() {
             {/* Horizontal scroll on mobile, grid on larger screens */}
             <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
               {similarSeries.map((item, index) => (
-                <motion.div
+                <div
                   key={item._id.toString()}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
                 >
                   <ContentCard content={item} />
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   Film,
@@ -40,7 +39,7 @@ export default function AdminLayout({
       {/* Mobile Sidebar Toggle */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-card rounded-lg border border-border"
+        className="lg:hidden fixed top-3 left-3 sm:top-4 sm:left-4 z-50 p-2 bg-card rounded-lg border border-border"
       >
         {isSidebarOpen ? (
           <X className="w-5 h-5 text-text" />
@@ -50,10 +49,10 @@ export default function AdminLayout({
       </button>
 
       {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: isSidebarOpen ? 0 : -300 }}
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-card border-r border-border lg:translate-x-0 transition-transform duration-300`}
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-card border-r border-border transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
       >
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
@@ -99,7 +98,7 @@ export default function AdminLayout({
             <span className="font-medium">Logout</span>
           </button>
         </div>
-      </motion.aside>
+      </aside>
 
       {/* Overlay for mobile */}
       {isSidebarOpen && (
@@ -111,7 +110,7 @@ export default function AdminLayout({
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        <div className="p-4 lg:p-8 pt-16 lg:pt-8">{children}</div>
+        <div className="p-3 sm:p-4 lg:p-8 pt-16 sm:pt-20 lg:pt-8">{children}</div>
       </main>
     </div>
   );

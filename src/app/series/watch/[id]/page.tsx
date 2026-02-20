@@ -3,7 +3,6 @@
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { ArrowLeft, Tv, Star, Calendar, Download } from "lucide-react";
 import { IContent, IEpisode } from "@/models/Content";
 import Navbar from "@/components/Navbar";
@@ -95,11 +94,9 @@ function SeriesWatchContent() {
     <main className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+        <div
           className="mb-6"
         >
           <Link
@@ -109,15 +106,13 @@ function SeriesWatchContent() {
             <ArrowLeft className="w-4 h-4" />
             Back to Series Details
           </Link>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Video Player */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="mb-6"
             >
               <VideoPlayer
@@ -125,13 +120,10 @@ function SeriesWatchContent() {
                 downloadLink={currentEpisode?.downloadLink || series.downloadLink}
                 title={currentEpisode?.episodeTitle || series.title}
               />
-            </motion.div>
+            </div>
 
             {/* Episode Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+            <div
               className="bg-card border border-border rounded-2xl p-6"
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -163,15 +155,12 @@ function SeriesWatchContent() {
                   </a>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Sidebar - Episode List */}
           <div className="lg:col-span-1">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
+            <div
             >
               <h3 className="text-lg font-semibold text-text mb-4">Episodes</h3>
               {series.seasons && (
@@ -181,7 +170,7 @@ function SeriesWatchContent() {
                   onEpisodeSelect={handleEpisodeSelect}
                 />
               )}
-            </motion.div>
+            </div>
           </div>
         </div>
 
@@ -193,15 +182,12 @@ function SeriesWatchContent() {
             </div>
             <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
               {relatedSeries.map((item, index) => (
-                <motion.div
+                <div
                   key={item._id.toString()}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
                 >
                   <ContentCard content={item} />
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>

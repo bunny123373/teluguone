@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 interface ModalProps {
@@ -20,21 +19,14 @@ export default function Modal({
   className,
 }: ModalProps) {
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
             onClick={onClose}
           />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.2 }}
+          <div
             className={cn(
               "fixed inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
               "w-full h-full md:h-auto md:max-h-[90vh] md:w-full md:max-w-lg",
@@ -55,9 +47,9 @@ export default function Modal({
               </button>
             </div>
             <div className="flex-1 overflow-auto p-4">{children}</div>
-          </motion.div>
+          </div>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }

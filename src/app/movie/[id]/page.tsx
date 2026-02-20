@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { Play, Download, Star, Calendar, Globe, ArrowLeft, Clock } from "lucide-react";
 import { IContent } from "@/models/Content";
 import Navbar from "@/components/Navbar";
@@ -24,6 +23,12 @@ export default function MovieDetailsPage() {
     }
   }, [params.id]);
 
+  useEffect(() => {
+    if (movie?.title) {
+      document.title = `${movie.title} (${movie.year}) - TeluguDB`;
+    }
+  }, [movie]);
+
   const fetchMovie = async () => {
     try {
       const response = await fetch(`/api/content/${params.id}`);
@@ -31,6 +36,8 @@ export default function MovieDetailsPage() {
       if (data.success) {
         setMovie(data.data);
         fetchSimilarMovies(data.data.language, data.data._id);
+      } else {
+        console.error("Movie not found:", data.error);
       }
     } catch (error) {
       console.error("Error fetching movie:", error);
@@ -55,17 +62,17 @@ export default function MovieDetailsPage() {
 
   if (!movie) {
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen pv-bg">
         <Navbar />
         <div className="py-20 text-center">
-          <p className="text-muted text-lg">Redirecting...</p>
+          <p className="pv-no-results">Redirecting...</p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-background smooth-scroll">
+    <main className="min-h-screen pv-bg smooth-scroll">
       <Navbar />
 
       {/* Banner Background */}
@@ -86,11 +93,7 @@ export default function MovieDetailsPage() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 sm:-mt-40 md:-mt-48 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8"
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Poster */}
           <div className="lg:col-span-1">
             <div className="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border border-border max-w-sm mx-auto lg:max-w-none bg-card">
@@ -177,7 +180,7 @@ export default function MovieDetailsPage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-              <Link href={`/watch/${movie._id}`} className="block enhanced-button ripple haptic-touch">
+              <Link href={`/watch/${movie.slug || movie._id}`} className="block enhanced-button ripple haptic-touch">
                 <Button size="lg" className="gap-2 w-full sm:w-auto justify-center touch-friendly">
                   <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                   Watch Now
@@ -198,7 +201,7 @@ export default function MovieDetailsPage() {
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Similar Movies */}
         {similarMovies.length > 0 && (
@@ -208,16 +211,13 @@ export default function MovieDetailsPage() {
             </div>
             {/* Horizontal scroll on mobile, grid on larger screens */}
             <div className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible pb-4 px-2">
-              {similarMovies.map((item, index) => (
-                <motion.div
+              {similarMovies.map((item) => (
+                <div
                   key={item._id.toString()}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   className="flex-shrink-0 w-[140px] sm:w-[160px] md:w-auto snap-start"
                 >
                   <ContentCard content={item} />
-                </motion.div>
+                </div>
               ))}
             </div>
           </section>

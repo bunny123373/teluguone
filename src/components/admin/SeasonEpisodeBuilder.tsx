@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, ChevronDown, ChevronUp, Play } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { ISeason, IEpisode } from "@/models/Content";
@@ -125,124 +124,117 @@ export default function SeasonEpisodeBuilder({
               </button>
             </div>
 
-            <AnimatePresence>
-              {expandedSeason === seasonIndex && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-border"
-                >
-                  <div className="p-4 space-y-4">
-                    {season.episodes.length === 0 && (
-                      <p className="text-muted text-sm text-center py-4">
-                        No episodes in this season
-                      </p>
-                    )}
+            {expandedSeason === seasonIndex && (
+              <div className="border-t border-border">
+                <div className="p-4 space-y-4">
+                  {season.episodes.length === 0 && (
+                    <p className="text-muted text-sm text-center py-4">
+                      No episodes in this season
+                    </p>
+                  )}
 
-                    {season.episodes.map((episode, episodeIndex) => (
-                      <div
-                        key={episodeIndex}
-                        className="bg-card rounded-xl p-4 space-y-3"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                              <Play className="w-4 h-4 text-primary" />
-                            </div>
-                            <span className="font-medium text-text">
-                              Episode {episode.episodeNumber}
-                            </span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleRemoveEpisode(seasonIndex, episodeIndex)
-                            }
-                            className="p-1.5 rounded-lg hover:bg-red-500/20 text-muted hover:text-red-500 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <input
-                            type="text"
-                            placeholder="Episode Title"
-                            value={episode.episodeTitle}
-                            onChange={(e) =>
-                              handleEpisodeChange(
-                                seasonIndex,
-                                episodeIndex,
-                                "episodeTitle",
-                                e.target.value
-                              )
-                            }
-                            className="px-3 py-2 rounded-lg bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                          />
-                          <select
-                            value={episode.quality}
-                            onChange={(e) =>
-                              handleEpisodeChange(
-                                seasonIndex,
-                                episodeIndex,
-                                "quality",
-                                e.target.value
-                              )
-                            }
-                            className="px-3 py-2 rounded-lg bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                          >
-                            <option value="480p">480p</option>
-                            <option value="720p">720p</option>
-                            <option value="1080p">1080p</option>
-                            <option value="4K">4K</option>
-                          </select>
-                          <input
-                            type="text"
-                            placeholder="Watch Link (MP4/M3U8)"
-                            value={episode.watchLink}
-                            onChange={(e) =>
-                              handleEpisodeChange(
-                                seasonIndex,
-                                episodeIndex,
-                                "watchLink",
-                                e.target.value
-                              )
-                            }
-                            className="px-3 py-2 rounded-lg bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Download Link"
-                            value={episode.downloadLink}
-                            onChange={(e) =>
-                              handleEpisodeChange(
-                                seasonIndex,
-                                episodeIndex,
-                                "downloadLink",
-                                e.target.value
-                              )
-                            }
-                            className="px-3 py-2 rounded-lg bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                          />
-                        </div>
-                      </div>
-                    ))}
-
-                    <Button
-                      type="button"
-                      onClick={() => handleAddEpisode(seasonIndex)}
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
+                  {season.episodes.map((episode, episodeIndex) => (
+                    <div
+                      key={episodeIndex}
+                      className="bg-card rounded-xl p-4 space-y-3"
                     >
-                      <Plus className="w-4 h-4 mr-1" />
-                      Add Episode
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                            <Play className="w-4 h-4 text-primary" />
+                          </div>
+                          <span className="font-medium text-text">
+                            Episode {episode.episodeNumber}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemoveEpisode(seasonIndex, episodeIndex)
+                          }
+                          className="p-1.5 rounded-lg hover:bg-red-500/20 text-muted hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          placeholder="Episode Title"
+                          value={episode.episodeTitle}
+                          onChange={(e) =>
+                            handleEpisodeChange(
+                              seasonIndex,
+                              episodeIndex,
+                              "episodeTitle",
+                              e.target.value
+                            )
+                          }
+                          className="px-3 py-2 rounded-lg bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                        />
+                        <select
+                          value={episode.quality}
+                          onChange={(e) =>
+                            handleEpisodeChange(
+                              seasonIndex,
+                              episodeIndex,
+                              "quality",
+                              e.target.value
+                            )
+                          }
+                          className="px-3 py-2 rounded-lg bg-background border border-border text-text focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                        >
+                          <option value="480p">480p</option>
+                          <option value="720p">720p</option>
+                          <option value="1080p">1080p</option>
+                          <option value="4K">4K</option>
+                        </select>
+                        <input
+                          type="text"
+                          placeholder="Watch Link (MP4/M3U8)"
+                          value={episode.watchLink}
+                          onChange={(e) =>
+                            handleEpisodeChange(
+                              seasonIndex,
+                              episodeIndex,
+                              "watchLink",
+                              e.target.value
+                            )
+                          }
+                          className="px-3 py-2 rounded-lg bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Download Link"
+                          value={episode.downloadLink}
+                          onChange={(e) =>
+                            handleEpisodeChange(
+                              seasonIndex,
+                              episodeIndex,
+                              "downloadLink",
+                              e.target.value
+                            )
+                          }
+                          className="px-3 py-2 rounded-lg bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <Button
+                    type="button"
+                    onClick={() => handleAddEpisode(seasonIndex)}
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add Episode
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

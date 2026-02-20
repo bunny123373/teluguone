@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Content from "@/models/Content";
 
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    + "-" + Date.now().toString(36);
+};
+
 // Helper function for API responses
 const createResponse = (data: any, status: number = 200) => {
   return NextResponse.json(data, { 
@@ -76,6 +84,10 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
+
+    if (!body.slug) {
+      body.slug = generateSlug(body.title);
+    }
 
     const content = await Content.create(body);
 
