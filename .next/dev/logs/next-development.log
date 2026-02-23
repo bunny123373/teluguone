@@ -40,3 +40,10 @@ Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
 [00:27:34.035] Browser LOG     [Vercel Speed Insights] Failed to load script from https://va.vercel-scripts.com/v1/speed-insights/script.debug.js. Please check if any content blockers are enabled and try again.
 [00:27:48.531] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-00.hqqoxgl.mongodb.net
 [00:29:01.087] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:29:23.589] Server  ERROR   Error fetching content: MongoServerSelectionError: connect ETIMEDOUT 34.93.73.247:27017
+[00:30:41.708] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:33:25.764] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"href":"http://localhost:3000/","id":"v3-1771822826759-8514964461649","route":"/","type":"TTFB","value":137}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
+[00:33:43.775] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-00.hqqoxgl.mongodb.net
+[00:35:58.026] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:36:19.810] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-01.hqqoxgl.mongodb.net
+[00:37:05.700] Browser LOG     [Vercel Speed Insights] Failed to load script from https://va.vercel-scripts.com/v1/speed-insights/script.debug.js. Please check if any content blockers are enabled and try again.
