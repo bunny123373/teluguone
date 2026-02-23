@@ -1,4 +1,7 @@
 import { Metadata } from "next";
+
+export const revalidate = 60;
+
 import WatchPageClient from "./WatchPageClient";
 
 type Props = {

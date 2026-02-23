@@ -48,9 +48,10 @@ export async function GET(
 // PUT /api/content/[id] - Update content (admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const adminKey = request.headers.get("x-admin-key");
 
     if (adminKey !== process.env.ADMIN_KEY) {
@@ -65,7 +66,7 @@ export async function PUT(
     const body = await request.json();
 
     const content = await Content.findByIdAndUpdate(
-      params.id,
+      id,
       { ...body, updatedAt: new Date() },
       { new: true, runValidators: true }
     );
@@ -87,9 +88,10 @@ export async function PUT(
 // DELETE /api/content/[id] - Delete content (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const adminKey = request.headers.get("x-admin-key");
 
     if (adminKey !== process.env.ADMIN_KEY) {
@@ -101,7 +103,7 @@ export async function DELETE(
 
     await connectDB();
 
-    const content = await Content.findByIdAndDelete(params.id);
+    const content = await Content.findByIdAndDelete(id);
 
     if (!content) {
       return createResponse({ success: false, error: "Content not found" }, 404);

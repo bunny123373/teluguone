@@ -1,3 +1,5 @@
+export const dynamic = 'force-static';
+
 export const metadata = {
   title: "Disclaimer - TeluguDB",
   description: "Disclaimer for TeluguDB",

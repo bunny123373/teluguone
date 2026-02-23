@@ -40,7 +40,7 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
   const [showQualityMenu, setShowQualityMenu] = useState(false);
   const [currentQuality, setCurrentQuality] = useState("Auto");
   const [error, setError] = useState<string | null>(null);
-  const controlsTimeoutRef = useRef<NodeJS.Timeout>();
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const videoSources = sources && sources.length > 0 
     ? QUALITIES.filter(q => sources.some(s => s.quality === q)).map(q => ({ quality: q, url: sources.find(s => s.quality === q)!.url }))

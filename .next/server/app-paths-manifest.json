@@ -1,6 +1,18 @@
 {
+  "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
+  "/about/page": "app/about/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/content/[id]/route": "app/api/content/[id]/route.js",
+  "/api/content/route": "app/api/content/route.js",
+  "/api/streamtape/route": "app/api/streamtape/route.js",
+  "/contact/page": "app/contact/page.js",
+  "/disclaimer/page": "app/disclaimer/page.js",
   "/movie/[id]/page": "app/movie/[id]/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/page": "app/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/series/[id]/page": "app/series/[id]/page.js",
+  "/series/watch/[id]/page": "app/series/watch/[id]/page.js",
+  "/terms/page": "app/terms/page.js",
+  "/watch/[id]/page": "app/watch/[id]/page.js"
 }
