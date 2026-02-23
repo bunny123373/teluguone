@@ -14,6 +14,7 @@ import {
   getYearFromDate,
   mapGenreToApp,
   inferCategory,
+  inferLanguage,
   TMDBSearchResult,
   TMDBMovieDetails,
   TMDBTvDetails,
@@ -28,6 +29,7 @@ interface TMDBResult {
   rating: number;
   genres: string[];
   category: string;
+  language: string;
   type: "movie" | "tv";
 }
 
@@ -105,6 +107,8 @@ export default function TMDBFetchModal({
       const genres = details.genres.map((g) => mapGenreToApp(g.name));
       const countryCode = details.production_countries?.[0]?.iso_3166_1;
       const category = inferCategory(mediaType, genres, countryCode);
+      const originalLang = (details as any).original_language || "";
+      const language = inferLanguage(originalLang, details.production_countries);
 
       const tmdbResult: TMDBResult = {
         title: "title" in details ? details.title : details.name,
@@ -115,6 +119,7 @@ export default function TMDBFetchModal({
         rating: details.vote_average,
         genres,
         category,
+        language,
         type: mediaType,
       };
 

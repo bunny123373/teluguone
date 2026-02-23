@@ -26,6 +26,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://teluguone.vercel.app'),
   title: {
     default: "TeluguDB - Stream & Download Telugu Movies & Web Series",
     template: "%s | TeluguDB",
@@ -57,7 +58,7 @@ export const metadata: Metadata = {
       "Your ultimate destination for Telugu movies and web series. Stream and download the latest content in high quality.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://teluguone.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "TeluguDB",
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
     title: "TeluguDB - Stream & Download Telugu Movies & Web Series",
     description:
       "Your ultimate destination for Telugu movies and web series. Stream and download the latest content in high quality.",
-    images: ["/og-image.jpg"],
+    images: ["https://teluguone.vercel.app/og-image.jpg"],
   },
   verification: {
     google: "your-google-verification-code",

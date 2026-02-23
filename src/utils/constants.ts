@@ -8,8 +8,8 @@ export const LANGUAGES = [
 ];
 
 export const CATEGORIES = [
-  "Trending",
   "Latest",
+  "Trending",
   "Dubbed",
   "Movies",
   "Web Series",

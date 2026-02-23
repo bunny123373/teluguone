@@ -41,6 +41,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
     rating: number;
     genres: string[];
     category: string;
+    language: string;
   }) => {
     setFormData((prev) => ({
       ...prev,
@@ -52,6 +53,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
       rating: result.rating.toString(),
       genre: result.genres[0] || "",
       category: result.category || "",
+      language: result.language || "",
     }));
   };
 

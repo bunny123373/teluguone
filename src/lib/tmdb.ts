@@ -28,6 +28,7 @@ export interface TMDBMovieDetails {
   id: number;
   title: string;
   original_title: string;
+  original_language: string;
   overview: string;
   poster_path: string | null;
   backdrop_path: string | null;
@@ -43,6 +44,7 @@ export interface TMDBTvDetails {
   id: number;
   name: string;
   original_name: string;
+  original_language: string;
   overview: string;
   poster_path: string | null;
   backdrop_path: string | null;
@@ -125,24 +127,24 @@ export function getYearFromDate(dateString: string | undefined): string {
 export function mapGenreToApp(genreName: string): string {
   const genreMap: Record<string, string> = {
     Action: "Action",
-    Adventure: "Adventure",
-    Animation: "Animation",
+    Adventure: "Action",
+    Animation: "Action",
     Comedy: "Comedy",
-    Crime: "Crime",
+    Crime: "Thriller",
     Drama: "Drama",
-    Family: "Family",
-    Fantasy: "Fantasy",
-    Horror: "Horror",
-    Music: "Musical",
-    Mystery: "Mystery",
-    Romance: "Romance",
-    "Science Fiction": "Sci-Fi",
+    Family: "Drama",
+    Fantasy: "Action",
+    Horror: "Thriller",
+    Music: "Drama",
+    Mystery: "Thriller",
+    Romance: "Drama",
+    "Science Fiction": "Action",
     Thriller: "Thriller",
-    War: "War",
+    War: "Action",
     Documentary: "Drama",
     History: "Drama",
   };
-  return genreMap[genreName] || genreName;
+  return genreMap[genreName] || "Action";
 }
 
 export function inferCategory(
@@ -155,12 +157,52 @@ export function inferCategory(
   }
 
   const genreSet = new Set(genres.map((g) => g.toLowerCase()));
+  const countryCodeUpper = countryCode?.toUpperCase();
   
-  if (countryCode && ["IN", "US", "GB"].includes(countryCode)) {
+  if (countryCodeUpper && ["IN"].includes(countryCodeUpper)) {
     if (genreSet.has("animation")) {
-      return "Movies";
+      return "Dubbed";
     }
+    return "Latest";
   }
   
-  return "Movies";
+  if (genreSet.has("comedy")) {
+    return "Comedy";
+  }
+  if (genreSet.has("drama") || genreSet.has("romance")) {
+    return "Drama";
+  }
+  if (genreSet.has("thriller") || genreSet.has("horror") || genreSet.has("crime") || genreSet.has("mystery")) {
+    return "Thriller";
+  }
+  if (genreSet.has("action") || genreSet.has("adventure") || genreSet.has("fantasy") || genreSet.has("science fiction")) {
+    return "Action";
+  }
+  
+  return "Latest";
+}
+
+export function inferLanguage(
+  originalLanguage: string | undefined,
+  productionCountries: { iso_3166_1: string }[] | undefined
+): string {
+  if (!originalLanguage) return "";
+  
+  const langMap: Record<string, string> = {
+    te: "Telugu",
+    hi: "Hindi",
+    ta: "Tamil",
+    ml: "Malayalam",
+    kn: "Kannada",
+    en: "English",
+  };
+  
+  const lang = langMap[originalLanguage] || "";
+  
+  if (lang) return lang;
+  
+  const country = productionCountries?.[0]?.iso_3166_1;
+  if (country === "IN") return "Telugu";
+  
+  return "";
 }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import connectDB from "@/lib/mongodb";
 import Content from "@/models/Content";
 
@@ -28,7 +29,12 @@ export async function GET(
     const { id } = await params;
     await connectDB();
 
-    let content = await Content.findById(id);
+    let content = null;
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
+
+    if (isValidObjectId) {
+      content = await Content.findById(id);
+    }
 
     if (!content) {
       content = await Content.findOne({ slug: id });
@@ -39,9 +45,9 @@ export async function GET(
     }
 
     return createResponse({ success: true, data: content }, 200);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching content:", error);
-    return createResponse({ success: false, error: "Failed to fetch content" }, 500);
+    return createResponse({ success: false, error: "Failed to fetch content", details: error?.message || String(error) }, 500);
   }
 }
 
