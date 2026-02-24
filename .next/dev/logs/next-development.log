@@ -1,49 +1,16 @@
-[00:00:08.615] Server  LOG     ✓ Ready in 7.1s
-[00:00:11.800] Server  LOG     ○ Compiling /movie/[id] ...
-[00:00:14.807] Server  WARN    ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:00:16.751] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:18.790] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:21.251] Server  LOG     MongoDB connected successfully
-[00:00:23.061] Server  WARN    Image with src "https://res.cloudinary.com/dchekxdof/image/upload/v1770923163/IMG_20260213_003139_292_akrzbu.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:23.869] Server  WARN    ⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
-[00:00:23.875] Browser WARN    Image with src "https://res.cloudinary.com/dchekxdof/image/upload/v1770923163/IMG_20260213_003139_292_akrzbu.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:58.121] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821002675-7695101037171","route":"/movie/[id]","type":"TTFB","value":6429}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"4g"} /_vercel/speed-insights/vitals
-[00:01:05.953] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:08.916] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:01:08.916] Browser WARN    Image with src "https://res.cloudinary.com/dchekxdof/image/upload/v1770923163/IMG_20260213_003139_292_akrzbu.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:33.933] Server  WARN    ⚠ Cross origin request detected from 192.168.55.104 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+[00:02:51.967] Server  LOG     ✓ Ready in 155.7s
+[00:02:55.453] Server  LOG     ○ Compiling / ...
+[00:04:06.434] Server  LOG     MongoDB connected successfully
+[00:04:07.708] Server  WARN    ⚠ Cross origin request detected from 192.168.55.104 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
 Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
-[00:01:34.228] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:34.228] Browser WARN    Image with src "https://res.cloudinary.com/dchekxdof/image/upload/v1770923163/IMG_20260213_003139_292_akrzbu.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+[00:04:07.808] Server  WARN    Image with src "https://image.tmdb.org/t/p/w780/xzpXvyetmrdR3NSRN9uy0xO3lR1.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:36.310] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:02:36.098] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821052841-8650895423451","route":"/movie/[id]","type":"TTFB","value":152}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
-[00:02:39.041] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:39.981] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:02:40.350] Browser WARN    Image with src "https://res.cloudinary.com/dchekxdof/image/upload/v1770923163/IMG_20260213_003139_292_akrzbu.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:04:07.955] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:08.411] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:09.223] Browser WARN    Image with src "https://image.tmdb.org/t/p/w780/xzpXvyetmrdR3NSRN9uy0xO3lR1.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:04:03.694] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821145328-4981384577087","route":"/movie/[id]","type":"FCP","value":592},{"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821145329-2465233343441","route":"/movie/[id]","type":"TTFB","value":188},{"attribution":{"eventTarget":"main.min-h-screen.bg-[#0d1117]>div.w-full.h-[50vh].md:h-[60vh].relative>img.object-cover"},"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821145328-5248608320324","route":"/movie/[id]","type":"LCP","value":2772},{"attribution":{},"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821145330-4877669747915","route":"/movie/[id]","type":"CLS","value":0}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
-[00:04:45.706] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"attribution":{"eventTarget":"main.min-h-screen.bg-[#0d1117]>div.w-full.h-[50vh].md:h-[60vh].relative>img.object-cover"},"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821145330-4877669747915","route":"/movie/[id]","type":"CLS","value":0.4111}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
-[00:05:48.692] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"attribution":{"eventTarget":"main.min-h-screen.bg-[#0d1117]>div.w-full.h-[50vh].md:h-[60vh].relative>img.object-cover","eventType":"pointerdown"},"href":"http://localhost:3000/movie/garv-mlyo0t39","id":"v3-1771821145329-1180166187215","route":"/movie/[id]","type":"INP","value":8}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
-[00:06:45.823] Browser WARN    Image with src "https://res.cloudinary.com/dchekxdof/image/upload/v1770923163/IMG_20260213_003139_292_akrzbu.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
+[00:04:09.603] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:04:11.419] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:04:25.494] Browser WARN    Image with src "https://image.tmdb.org/t/p/w780/xzpXvyetmrdR3NSRN9uy0xO3lR1.jpg" is using quality "85" which is not configured in images.qualities [75]. Please update your config to [75, 85].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:07:12.695] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"attribution":{"eventTarget":"div.pv-rows-container>div.pv-row>div.pv-row-container>button.pv-scroll-btn.pv-scroll-right","eventType":"click"},"href":"http://localhost:3000/","id":"v3-1771821145329-1180166187215","route":"/","type":"INP","value":56}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
-[00:18:17.058] Server  LOG     ✓ Compiled in 2.3s
-[00:18:37.619] Server  LOG     ✓ Compiled in 314ms
-[00:26:08.099] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:26:14.549] Browser LOG     [Vercel Speed Insights] Failed to load script from https://va.vercel-scripts.com/v1/speed-insights/script.debug.js. Please check if any content blockers are enabled and try again.
-[00:26:48.139] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-00.hqqoxgl.mongodb.net
-[00:27:27.654] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:27:34.035] Browser LOG     [Vercel Speed Insights] Failed to load script from https://va.vercel-scripts.com/v1/speed-insights/script.debug.js. Please check if any content blockers are enabled and try again.
-[00:27:48.531] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-00.hqqoxgl.mongodb.net
-[00:29:01.087] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:29:23.589] Server  ERROR   Error fetching content: MongoServerSelectionError: connect ETIMEDOUT 34.93.73.247:27017
-[00:30:41.708] Browser LOG     %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:33:25.764] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"href":"http://localhost:3000/","id":"v3-1771822826759-8514964461649","route":"/","type":"TTFB","value":137}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
-[00:33:43.775] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-00.hqqoxgl.mongodb.net
-[00:35:58.026] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:36:19.810] Server  ERROR   Error fetching content: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-tjq3mli-shard-00-01.hqqoxgl.mongodb.net
-[00:37:05.700] Browser LOG     [Vercel Speed Insights] Failed to load script from https://va.vercel-scripts.com/v1/speed-insights/script.debug.js. Please check if any content blockers are enabled and try again.
+[00:04:27.530] Browser LOG     %c[Vercel Speed Insights]%c [vitals] color: rgb(120, 120, 120) color: inherit {"metrics":[{"href":"http://localhost:3001/","id":"v3-1771916655868-2262435665467","route":"/","type":"TTFB","value":162599}],"scriptVersion":"0.1.3","sdkName":"@vercel/speed-insights/next","sdkVersion":"1.3.1","speed":"3g"} /_vercel/speed-insights/vitals
