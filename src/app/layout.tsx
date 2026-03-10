@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import LoadingProvider from "@/components/LoadingProvider";
 import PageTransition from "@/components/PageTransition";
+import MobileBackFix from "@/components/MobileBackFix";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -95,7 +96,10 @@ export default function RootLayout({
         <SpeedInsights />
         <LoadingProvider>
           <Providers>
-            <PageTransition>{children}</PageTransition>
+            <PageTransition>
+              <MobileBackFix />
+              {children}
+            </PageTransition>
           </Providers>
         </LoadingProvider>
       </body>
