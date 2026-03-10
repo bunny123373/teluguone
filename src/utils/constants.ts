@@ -7,6 +7,21 @@ export const LANGUAGES = [
   "Kannada",
 ];
 
+export const AUDIO_LANGUAGES = [
+  "Telugu",
+  "Hindi",
+  "Tamil",
+  "Malayalam",
+  "English",
+  "Kannada",
+  "Japanese",
+  "Korean",
+  "Chinese",
+  "Spanish",
+  "French",
+  "German",
+];
+
 export const CATEGORIES = [
   "Latest",
   "Trending",

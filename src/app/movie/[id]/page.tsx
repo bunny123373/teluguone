@@ -183,9 +183,15 @@ export default function MovieDetailsPage() {
               <p className="text-white">{movie.tags?.slice(0, 5).join(", ") || "N/A"}</p>
             </div>
             <div>
-              <p className="text-gray-500">Audio</p>
+              <p className="text-gray-500">Primary Language</p>
               <p className="text-white">{movie.language || "Telugu"}</p>
             </div>
+            {movie.audioLanguages && movie.audioLanguages.length > 0 && (
+              <div>
+                <p className="text-gray-500">Audio Languages</p>
+                <p className="text-white">{movie.audioLanguages.join(", ")}</p>
+              </div>
+            )}
             <div>
               <p className="text-gray-500">Subtitles</p>
               <p className="text-white">English, Hindi, Telugu</p>

@@ -5,7 +5,7 @@ import { Film, Upload, X, Database } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import TMDBFetchModal from "./TMDBFetchModal";
-import { LANGUAGES, CATEGORIES, GENRES, QUALITIES } from "@/utils/constants";
+import { LANGUAGES, CATEGORIES, GENRES, QUALITIES, AUDIO_LANGUAGES } from "@/utils/constants";
 
 interface UploadMovieFormProps {
   onSubmit: (data: any) => void;
@@ -21,6 +21,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
     description: "",
     year: "",
     language: "",
+    audioLanguages: [] as string[],
     category: "",
     genre: "",
     quality: "",
@@ -172,6 +173,39 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
               </option>
             ))}
           </select>
+        </div>
+
+        {/* Audio Languages */}
+        <div className="sm:col-span-2">
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Audio Languages</label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-3 bg-[#0d1117] border border-gray-700 rounded-md max-h-40 overflow-y-auto">
+            {AUDIO_LANGUAGES.map((lang) => (
+              <label
+                key={lang}
+                className="flex items-center gap-2 cursor-pointer hover:bg-[#161f2e] p-1.5 rounded text-sm text-gray-300"
+              >
+                <input
+                  type="checkbox"
+                  checked={formData.audioLanguages.includes(lang)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        audioLanguages: [...prev.audioLanguages, lang],
+                      }));
+                    } else {
+                      setFormData((prev) => ({
+                        ...prev,
+                        audioLanguages: prev.audioLanguages.filter((l) => l !== lang),
+                      }));
+                    }
+                  }}
+                  className="w-4 h-4 rounded border-gray-600 text-[#00a8e1] focus:ring-[#00a8e1]"
+                />
+                {lang}
+              </label>
+            ))}
+          </div>
         </div>
 
         {/* Category */}

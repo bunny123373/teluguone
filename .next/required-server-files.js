@@ -2,7 +2,7 @@ self.__SERVER_FILES_MANIFEST={
   "version": 1,
   "config": {
     "env": {
-      "MONGODB_URI": "mongodb+srv://Balujeswanth:Baluflix123@cluster0.hqqoxgl.mongodb.net/baluflix?retryWrites=true&w=majority",
+      "MONGODB_URI": "mongodb+srv://Balujeswanth:Baluflix123@cluster0.hqqoxgl.mongodb.net/Baluflix?retryWrites=true&w=majority",
       "ADMIN_KEY": "123"
     },
     "webpack": null,

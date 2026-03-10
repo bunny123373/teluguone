@@ -7,7 +7,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import { IContent, ISeason } from "@/models/Content";
-import { LANGUAGES, CATEGORIES, GENRES, QUALITIES } from "@/utils/constants";
+import { LANGUAGES, CATEGORIES, GENRES, QUALITIES, AUDIO_LANGUAGES } from "@/utils/constants";
 import SeasonEpisodeBuilder from "./SeasonEpisodeBuilder";
 
 interface EditContentModalProps {
@@ -120,6 +120,38 @@ export default function EditContentModal({
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-text mb-1.5">Audio Languages</label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-3 bg-background border border-border rounded-xl max-h-32 overflow-y-auto">
+              {AUDIO_LANGUAGES.map((lang) => (
+                <label
+                  key={lang}
+                  className="flex items-center gap-2 cursor-pointer hover:bg-muted p-1 rounded text-sm text-text"
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.audioLanguages?.includes(lang) || false}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFormData((prev: any) => ({
+                          ...prev,
+                          audioLanguages: [...(prev.audioLanguages || []), lang],
+                        }));
+                      } else {
+                        setFormData((prev: any) => ({
+                          ...prev,
+                          audioLanguages: (prev.audioLanguages || []).filter((l: string) => l !== lang),
+                        }));
+                      }
+                    }}
+                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                  />
+                  {lang}
+                </label>
+              ))}
+            </div>
           </div>
 
           <div>
