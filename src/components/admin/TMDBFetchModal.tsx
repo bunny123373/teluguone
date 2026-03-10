@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, X, Film, Tv, Star } from "lucide-react";
+import { Search, X, Film, Tv, Star, TrendingUp } from "lucide-react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -15,6 +15,8 @@ import {
   mapGenreToApp,
   inferCategory,
   inferLanguage,
+  getTrendingMovies,
+  getTrendingTV,
   TMDBSearchResult,
   TMDBMovieDetails,
   TMDBTvDetails,
@@ -54,6 +56,29 @@ export default function TMDBFetchModal({
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [fetchingDetails, setFetchingDetails] = useState(false);
 
+  useEffect(() => {
+    if (isOpen && results.length === 0) {
+      loadTrending();
+    }
+  }, [isOpen, mediaType]);
+
+  const loadTrending = async () => {
+    setLoading(true);
+    try {
+      if (mediaType === "movie") {
+        const data = await getTrendingMovies();
+        setResults(data.results.slice(0, 12));
+      } else {
+        const data = await getTrendingTV();
+        setResults(data.results.slice(0, 12));
+      }
+    } catch (error) {
+      console.error("Error loading trending:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSearch = async () => {
     if (!query.trim()) return;
     setSearching(true);
@@ -69,14 +94,16 @@ export default function TMDBFetchModal({
 
   useEffect(() => {
     if (query.trim().length < 2) {
-      setResults([]);
+      if (query.trim().length === 0 && results.length === 0) {
+        loadTrending();
+      }
       return;
     }
     const timer = setTimeout(() => {
       setSearching(true);
       searchTMDB(query, mediaType)
         .then((data) => {
-          setResults(data.results.slice(0, 10));
+          setResults(data.results.slice(0, 12));
         })
         .catch((err) => {
           console.error("TMDB search error:", err);
@@ -88,6 +115,11 @@ export default function TMDBFetchModal({
     }, 1000);
     return () => clearTimeout(timer);
   }, [query, mediaType]);
+
+  const handleClearSearch = () => {
+    setQuery("");
+    loadTrending();
+  };
 
   const handleSelect = async (result: TMDBSearchResult) => {
     setSelectedId(result.id);

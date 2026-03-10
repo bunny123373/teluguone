@@ -2,6 +2,38 @@ const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p";
 
+export async function getTrendingMovies(): Promise<TMDBSearchResponse> {
+  if (!TMDB_API_KEY) {
+    throw new Error("TMDB API key not configured");
+  }
+
+  const response = await fetch(
+    `${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}&language=en-US`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch trending movies");
+  }
+
+  return response.json();
+}
+
+export async function getTrendingTV(): Promise<TMDBSearchResponse> {
+  if (!TMDB_API_KEY) {
+    throw new Error("TMDB API key not configured");
+  }
+
+  const response = await fetch(
+    `${TMDB_BASE_URL}/trending/tv/week?api_key=${TMDB_API_KEY}&language=en-US`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch trending TV shows");
+  }
+
+  return response.json();
+}
+
 export interface TMDBSearchResult {
   id: number;
   title?: string;
