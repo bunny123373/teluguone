@@ -882,10 +882,12 @@ img {
 }
 
 .pv-logo-text {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   color: #fff;
-  letter-spacing: -0.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: var(--font-poppins);
 }
 
 .pv-nav-links {
