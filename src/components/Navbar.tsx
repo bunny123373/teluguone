@@ -18,10 +18,13 @@ export default function Navbar() {
         <div className="pv-nav-left">
           <Link href="/" className="pv-logo">
             <div className="pv-logo-icon">
-              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-                <path d="M24 4L4 14v20l20 10 20-10V14L24 4z" fill="#00A8E1"/>
-                <path d="M24 4L4 14v20l20 10 20-10V14L24 4z" stroke="#fff" strokeWidth="2"/>
-                <polygon points="20,18 32,24 20,30" fill="#fff"/>
+              <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
+                <g>
+                  <polyline points="32.1313 11.85 24 36.15 15.8687 11.85" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                </g>
+                <g>
+                  <circle cx="24" cy="24" r="21.5" fill="none" stroke="#00A8E1" strokeWidth="3"/>
+                </g>
               </svg>
             </div>
             <span className="pv-logo-text">prime video</span>
