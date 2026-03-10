@@ -128,7 +128,7 @@ export function mapGenreToApp(genreName: string): string {
   const genreMap: Record<string, string> = {
     Action: "Action",
     Adventure: "Action",
-    Animation: "Action",
+    Animation: "Animation",
     Comedy: "Comedy",
     Crime: "Thriller",
     Drama: "Drama",
@@ -143,6 +143,8 @@ export function mapGenreToApp(genreName: string): string {
     War: "Action",
     Documentary: "Drama",
     History: "Drama",
+    Western: "Action",
+    "TV Movie": "Drama",
   };
   return genreMap[genreName] || "Action";
 }
@@ -163,7 +165,6 @@ export function inferCategory(
     if (genreSet.has("animation")) {
       return "Dubbed";
     }
-    return "Latest";
   }
   
   if (genreSet.has("comedy")) {
@@ -179,7 +180,7 @@ export function inferCategory(
     return "Action";
   }
   
-  return "Latest";
+  return "Movies";
 }
 
 export function inferLanguage(

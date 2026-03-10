@@ -6,7 +6,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import TMDBFetchModal from "./TMDBFetchModal";
-import { LANGUAGES, CATEGORIES, GENRES, QUALITIES } from "@/utils/constants";
+import { LANGUAGES, CATEGORIES, GENRES, QUALITIES, AUDIO_LANGUAGES } from "@/utils/constants";
 import SeasonEpisodeBuilder from "./SeasonEpisodeBuilder";
 import { ISeason } from "@/models/Content";
 
@@ -24,6 +24,7 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
     description: "",
     year: "",
     language: "",
+    audioLanguages: [] as string[],
     category: "Web Series",
     genre: "",
     quality: "",
@@ -43,6 +44,8 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
     rating: number;
     genres: string[];
     category: string;
+    language: string;
+    audioLanguages?: string[];
   }) => {
     setFormData((prev) => ({
       ...prev,
@@ -54,6 +57,8 @@ export default function UploadSeriesForm({ onSubmit, isLoading }: UploadSeriesFo
       rating: result.rating.toString(),
       genre: result.genres[0] || "",
       category: result.category || "Web Series",
+      language: result.language || "",
+      audioLanguages: result.audioLanguages || [result.language].filter(Boolean),
     }));
   };
 

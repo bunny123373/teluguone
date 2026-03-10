@@ -43,6 +43,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
     genres: string[];
     category: string;
     language: string;
+    audioLanguages?: string[];
   }) => {
     setFormData((prev) => ({
       ...prev,
@@ -55,6 +56,7 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
       genre: result.genres[0] || "",
       category: result.category || "",
       language: result.language || "",
+      audioLanguages: result.audioLanguages || [result.language].filter(Boolean),
     }));
   };
 

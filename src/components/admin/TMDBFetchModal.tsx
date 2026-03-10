@@ -30,6 +30,7 @@ interface TMDBResult {
   genres: string[];
   category: string;
   language: string;
+  audioLanguages?: string[];
   type: "movie" | "tv";
 }
 
@@ -109,6 +110,18 @@ export default function TMDBFetchModal({
       const category = inferCategory(mediaType, genres, countryCode);
       const originalLang = (details as any).original_language || "";
       const language = inferLanguage(originalLang, details.production_countries);
+      
+      const audioLanguages: string[] = [];
+      if (language) audioLanguages.push(language);
+      
+      const spokenLanguages = (details as any).spoken_languages || [];
+      spokenLanguages.forEach((lang: any) => {
+        const langCode = lang.iso_639_1;
+        const langName = inferLanguage(langCode, []);
+        if (langName && !audioLanguages.includes(langName)) {
+          audioLanguages.push(langName);
+        }
+      });
 
       const tmdbResult: TMDBResult = {
         title: "title" in details ? details.title : details.name,
@@ -120,6 +133,7 @@ export default function TMDBFetchModal({
         genres,
         category,
         language,
+        audioLanguages: audioLanguages.length > 0 ? audioLanguages : [language].filter(Boolean),
         type: mediaType,
       };
 
