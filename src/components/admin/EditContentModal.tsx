@@ -279,6 +279,36 @@ export default function EditContentModal({
           />
         )}
 
+        {/* SEO Section */}
+        <div className="border-t border-border pt-4 mt-4">
+          <h3 className="text-text font-semibold mb-3">SEO Settings</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-text mb-1.5">Meta Title</label>
+              <input
+                type="text"
+                name="metaTitle"
+                value={formData.metaTitle || ""}
+                onChange={handleChange}
+                placeholder={formData.title || "Meta title"}
+                className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              <p className="text-xs text-muted mt-1">Leave empty to use default</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-text mb-1.5">Meta Description</label>
+              <textarea
+                name="metaDescription"
+                value={formData.metaDescription || ""}
+                onChange={handleChange}
+                placeholder={formData.description?.slice(0, 160) || "Meta description"}
+                rows={2}
+                className="w-full px-4 py-2.5 rounded-xl bg-background border border-border text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="flex justify-end gap-3 pt-4">
           <Button type="button" variant="outline" onClick={onClose}>
             Cancel

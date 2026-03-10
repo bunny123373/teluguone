@@ -20,6 +20,8 @@ import AdminContentTable from "@/components/admin/AdminContentTable";
 import EditContentModal from "@/components/admin/EditContentModal";
 import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";
 import AdminSettings from "@/components/admin/AdminSettings";
+import ActivityLogPage from "@/components/admin/ActivityLogPage";
+import { logActivity } from "@/lib/activityLog";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -116,6 +118,7 @@ export default function AdminPage() {
       
       if (result.success) {
         dispatch(addContent(result.data));
+        logActivity("upload", result.data.title, result.data._id);
         alert("Movie uploaded successfully!");
         setActiveTab("manage");
       } else {
@@ -151,6 +154,7 @@ export default function AdminPage() {
       
       if (result.success) {
         dispatch(addContent(result.data));
+        logActivity("upload", result.data.title, result.data._id);
         alert("Series uploaded successfully!");
         setActiveTab("manage");
       } else {
@@ -219,6 +223,7 @@ export default function AdminPage() {
 
       const result = await response.json();
       if (result.success) {
+        logActivity("delete", selectedContent.title, selectedContent._id.toString());
         dispatch(removeContent(selectedContent._id.toString()));
         setDeleteModalOpen(false);
         setSelectedContent(null);
@@ -464,6 +469,10 @@ export default function AdminPage() {
 
       {activeTab === "settings" && (
         <AdminSettings />
+      )}
+
+      {activeTab === "activity" && (
+        <ActivityLogPage />
       )}
 
       {/* Edit Modal */}

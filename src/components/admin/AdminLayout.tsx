@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   PlaySquare,
+  Clock,
 } from "lucide-react";
 import { ADMIN_NAV_ITEMS } from "@/utils/constants";
 
@@ -25,6 +26,7 @@ const iconMap: Record<string, React.ElementType> = {
   PlaySquare,
   Tv,
   Settings,
+  Clock,
 };
 
 export default function AdminLayout({

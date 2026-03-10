@@ -31,6 +31,8 @@ export interface IContent extends Document {
   watchLink?: string;
   downloadLink?: string;
   seasons?: ISeason[];
+  metaTitle?: string;
+  metaDescription?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -67,6 +69,8 @@ const ContentSchema: Schema = new Schema(
     watchLink: { type: String },
     downloadLink: { type: String },
     seasons: { type: [SeasonSchema], default: [] },
+    metaTitle: { type: String },
+    metaDescription: { type: String },
   },
   { timestamps: true }
 );

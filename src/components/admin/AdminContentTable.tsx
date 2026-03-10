@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
-import { Edit2, Trash2, Film, Tv } from "lucide-react";
+import { Edit2, Trash2, Search, Filter } from "lucide-react";
 import { IContent } from "@/models/Content";
 
 interface AdminContentTableProps {
@@ -20,6 +20,24 @@ export default function AdminContentTable({
 }: AdminContentTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [selectAll, setSelectAll] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [languageFilter, setLanguageFilter] = useState<string>("all");
+
+  const filteredContent = useMemo(() => {
+    return content.filter((item) => {
+      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.description?.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesType = typeFilter === "all" || item.type === typeFilter;
+      const matchesLanguage = languageFilter === "all" || item.language === languageFilter;
+      return matchesSearch && matchesType && matchesLanguage;
+    });
+  }, [content, searchQuery, typeFilter, languageFilter]);
+
+  const languages = useMemo(() => {
+    const langs = new Set(content.map((item) => item.language).filter(Boolean));
+    return Array.from(langs);
+  }, [content]);
 
   const toggleSelect = (id: string) => {
     const newSelected = new Set(selectedIds);
@@ -35,7 +53,7 @@ export default function AdminContentTable({
     if (selectAll) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(content.map((item) => item._id.toString())));
+      setSelectedIds(new Set(filteredContent.map((item) => item._id.toString())));
     }
     setSelectAll(!selectAll);
   };
@@ -64,6 +82,48 @@ export default function AdminContentTable({
 
   return (
     <div className="space-y-4">
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search by title or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
+          />
+        </div>
+        <div className="flex gap-2">
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="px-3 py-2.5 rounded-lg bg-[#0d1117] border border-gray-700 text-white focus:outline-none focus:border-[#00a8e1]"
+          >
+            <option value="all">All Types</option>
+            <option value="movie">Movies</option>
+            <option value="series">Series</option>
+          </select>
+          <select
+            value={languageFilter}
+            onChange={(e) => setLanguageFilter(e.target.value)}
+            className="px-3 py-2.5 rounded-lg bg-[#0d1117] border border-gray-700 text-white focus:outline-none focus:border-[#00a8e1]"
+          >
+            <option value="all">All Languages</option>
+            {languages.map((lang) => (
+              <option key={lang} value={lang}>{lang}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Results count */}
+      {searchQuery && (
+        <p className="text-gray-400 text-sm">
+          Found {filteredContent.length} of {content.length} items
+        </p>
+      )}
+
       {selectedIds.size > 0 && (
         <div className="flex items-center gap-4 p-3 bg-[#161f2e] rounded-lg border border-[#00a8e1]">
           <span className="text-white text-sm">
@@ -111,7 +171,7 @@ export default function AdminContentTable({
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
-              {content.map((item) => (
+              {filteredContent.map((item) => (
                 <tr
                   key={item._id.toString()}
                   className={`hover:bg-[#1f293a] transition-colors ${selectedIds.has(item._id.toString()) ? "bg-[#1f293a]" : ""}`}
