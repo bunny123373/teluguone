@@ -1,13 +1,19 @@
 import { cache } from "react";
 import { getContent } from "@/lib/content";
-import Navbar from "@/components/Navbar";
-import HeroBanner from "@/components/HeroBanner";
-import ContentRow from "@/components/ContentRow";
-import Footer from "@/components/Footer";
-import { IContent } from "@/models/Content";
 import ClientHome from "./ClientHome";
+import { IContent } from "@/models/Content";
 
-const getCachedContent = cache(getContent);
+const getCachedContent = cache(async () => {
+  try {
+    return await getContent();
+  } catch (error) {
+    console.error("Error in getCachedContent:", error);
+    return [];
+  }
+});
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   const allContent: IContent[] = await getCachedContent();

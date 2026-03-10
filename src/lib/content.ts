@@ -2,6 +2,7 @@ import connectDB from "./mongodb";
 import Content from "@/models/Content";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function getContent() {
   try {
