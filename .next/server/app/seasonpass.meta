@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/seasonpass/layout,_N_T_/seasonpass/page,_N_T_/seasonpass"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/seasonpass/__PAGE__",
+    "/seasonpass",
+    "/_index",
+    "/_head"
+  ]
+}

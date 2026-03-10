@@ -110,6 +110,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../src/app/seasonpass/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/seasonpass">> = Specific
+  const handler = {} as typeof import("../../src/app/seasonpass/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/series/[id]/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/series/[id]">> = Specific
@@ -141,6 +150,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/watch/[id]">> = Specific
   const handler = {} as typeof import("../../src/app/watch/[id]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/watchparty/[id]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/watchparty/[id]">> = Specific
+  const handler = {} as typeof import("../../src/app/watchparty/[id]/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

@@ -4,17 +4,20 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Play, Star, Plus, ChevronDown, Tv } from "lucide-react";
+import { Play, Star, Plus, ChevronDown, Tv, Users } from "lucide-react";
 import { IContent } from "@/models/Content";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContentCard from "@/components/ContentCard";
+import WatchPartyModal from "@/components/WatchPartyModal";
+import SeasonPassButton from "@/components/SeasonPassButton";
 
 export default function SeriesDetailsPage() {
   const params = useParams();
   const [series, setSeries] = useState<IContent | null>(null);
   const [similarSeries, setSimilarSeries] = useState<IContent[]>([]);
   const [selectedSeason, setSelectedSeason] = useState(0);
+  const [showWatchParty, setShowWatchParty] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -103,6 +106,18 @@ export default function SeriesDetailsPage() {
                 Watch Now
               </button>
             </Link>
+            <SeasonPassButton 
+              contentId={String(series._id)} 
+              contentTitle={series.title} 
+              contentType={series.type}
+            />
+            <button 
+              onClick={() => setShowWatchParty(true)}
+              className="flex items-center gap-2 px-4 md:px-6 py-2.5 bg-[#222] hover:bg-[#333] text-white font-medium text-sm rounded-sm border border-white/20 transition-all"
+            >
+              <Users className="w-4 h-4" />
+              Watch Party
+            </button>
             <button className="flex items-center justify-center w-10 h-10 bg-[#222] hover:bg-[#333] text-white rounded-sm border border-white/20 transition-all">
               <Plus className="w-4 h-4" />
             </button>
@@ -270,6 +285,17 @@ export default function SeriesDetailsPage() {
           </section>
         )}
       </div>
+
+      <WatchPartyModal 
+        isOpen={showWatchParty} 
+        onClose={() => setShowWatchParty(false)} 
+        content={series ? {
+          title: series.title,
+          slug: String(series.slug || series._id),
+          type: series.type,
+          _id: series._id
+        } : null} 
+      />
 
       <Footer />
     </main>

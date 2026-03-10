@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Play, Download, Star, Plus, ChevronDown, Clock, Info } from "lucide-react";
+import { Play, Download, Star, Plus, ChevronDown, Clock, Info, Users } from "lucide-react";
 import { IContent } from "@/models/Content";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContentCard from "@/components/ContentCard";
+import WatchPartyModal from "@/components/WatchPartyModal";
 
 export default function MovieDetailsPage() {
   const params = useParams();
   const [movie, setMovie] = useState<IContent | null>(null);
   const [similarMovies, setSimilarMovies] = useState<IContent[]>([]);
+  const [showWatchParty, setShowWatchParty] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -112,6 +114,13 @@ export default function MovieDetailsPage() {
                 </button>
               </a>
             )}
+            <button 
+              onClick={() => setShowWatchParty(true)}
+              className="flex items-center gap-2 px-4 md:px-6 py-2.5 bg-[#222] hover:bg-[#333] text-white font-medium text-sm rounded-sm border border-white/20 transition-all"
+            >
+              <Users className="w-4 h-4" />
+              Watch Party
+            </button>
             <button className="flex items-center justify-center w-10 h-10 bg-[#222] hover:bg-[#333] text-white rounded-sm border border-white/20 transition-all">
               <Plus className="w-4 h-4" />
             </button>
@@ -213,6 +222,17 @@ export default function MovieDetailsPage() {
           </section>
         )}
       </div>
+
+      <WatchPartyModal 
+        isOpen={showWatchParty} 
+        onClose={() => setShowWatchParty(false)} 
+        content={movie ? {
+          title: movie.title,
+          slug: String(movie.slug || movie._id),
+          type: movie.type,
+          _id: movie._id
+        } : null} 
+      />
 
       <Footer />
     </main>

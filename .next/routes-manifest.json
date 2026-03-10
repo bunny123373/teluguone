@@ -60,6 +60,14 @@
         "nxtPid": "nxtPid"
       },
       "namedRegex": "^/watch/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/watchparty/[id]",
+      "regex": "^/watchparty/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/watchparty/(?<nxtPid>[^/]+?)(?:/)?$"
     }
   ],
   "staticRoutes": [
@@ -122,6 +130,12 @@
       "regex": "^/privacy(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/seasonpass",
+      "regex": "^/seasonpass(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/seasonpass(?:/)?$"
     },
     {
       "page": "/terms",

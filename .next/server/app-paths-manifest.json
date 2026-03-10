@@ -11,8 +11,10 @@
   "/movie/[id]/page": "app/movie/[id]/page.js",
   "/page": "app/page.js",
   "/privacy/page": "app/privacy/page.js",
+  "/seasonpass/page": "app/seasonpass/page.js",
   "/series/[id]/page": "app/series/[id]/page.js",
   "/series/watch/[id]/page": "app/series/watch/[id]/page.js",
   "/terms/page": "app/terms/page.js",
-  "/watch/[id]/page": "app/watch/[id]/page.js"
+  "/watch/[id]/page": "app/watch/[id]/page.js",
+  "/watchparty/[id]/page": "app/watchparty/[id]/page.js"
 }

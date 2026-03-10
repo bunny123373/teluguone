@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setSearch, setTypeFilter, clearFilters } from "@/redux/slices/uiSlice";
-import { Search, Menu, X, Film, Tv, Home } from "lucide-react";
+import { Search, Menu, X, Film, Tv, Home, Bell } from "lucide-react";
 import { TYPE_FILTERS } from "@/utils/constants";
 
 export default function Navbar() {
@@ -36,6 +36,10 @@ export default function Navbar() {
             </Link>
             <Link href="/series" className="pv-nav-link">
               TV Shows
+            </Link>
+            <Link href="/seasonpass" className="pv-nav-link flex items-center gap-1">
+              <Bell className="w-4 h-4" />
+              Season Pass
             </Link>
           </div>
         </div>
@@ -90,6 +94,10 @@ export default function Navbar() {
             </Link>
             <Link href="/series" className="pv-mobile-link" onClick={() => setIsMenuOpen(false)}>
               TV Shows
+            </Link>
+            <Link href="/seasonpass" className="pv-mobile-link flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+              <Bell className="w-4 h-4" />
+              Season Pass
             </Link>
           </div>
         </div>
