@@ -79,8 +79,8 @@ export const metadata: Metadata = {
     canonical: "https://teluguone.vercel.app",
   },
   icons: {
-    icon: "/prime-icon.svg",
-    apple: "/prime-icon.svg",
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 };
 
