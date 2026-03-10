@@ -67,4 +67,5 @@ export const ADMIN_NAV_ITEMS = [
   { id: "upload-movie", label: "Upload Movie", icon: "PlaySquare" },
   { id: "upload-series", label: "Upload Series", icon: "Tv" },
   { id: "manage", label: "Manage", icon: "Settings" },
+  { id: "settings", label: "Settings", icon: "Settings" },
 ];

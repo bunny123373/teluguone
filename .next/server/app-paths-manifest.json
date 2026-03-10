@@ -3,6 +3,8 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
   "/admin/page": "app/admin/page.js",
+  "/api/admin/bulk-delete/route": "app/api/admin/bulk-delete/route.js",
+  "/api/admin/stats/route": "app/api/admin/stats/route.js",
   "/api/content/[id]/route": "app/api/content/[id]/route.js",
   "/api/content/route": "app/api/content/route.js",
   "/api/streamtape/route": "app/api/streamtape/route.js",

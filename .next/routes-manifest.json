@@ -102,6 +102,18 @@
       "namedRegex": "^/admin(?:/)?$"
     },
     {
+      "page": "/api/admin/bulk-delete",
+      "regex": "^/api/admin/bulk\\-delete(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/bulk\\-delete(?:/)?$"
+    },
+    {
+      "page": "/api/admin/stats",
+      "regex": "^/api/admin/stats(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/stats(?:/)?$"
+    },
+    {
       "page": "/api/content",
       "regex": "^/api/content(?:/)?$",
       "routeKeys": {},

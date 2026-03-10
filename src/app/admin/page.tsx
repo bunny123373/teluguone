@@ -19,6 +19,7 @@ import UploadSeriesForm from "@/components/admin/UploadSeriesForm";
 import AdminContentTable from "@/components/admin/AdminContentTable";
 import EditContentModal from "@/components/admin/EditContentModal";
 import DeleteConfirmModal from "@/components/admin/DeleteConfirmModal";
+import AdminSettings from "@/components/admin/AdminSettings";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -233,6 +234,35 @@ export default function AdminPage() {
     }
   };
 
+  const handleBulkDelete = async (ids: string[]) => {
+    if (!confirm(`Are you sure you want to delete ${ids.length} item(s)?`)) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/admin/bulk-delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": getAdminKey(),
+        },
+        body: JSON.stringify({ ids }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        ids.forEach((id) => dispatch(removeContent(id)));
+        alert(result.message);
+      } else {
+        alert(result.error || "Failed to delete content");
+      }
+    } catch (error) {
+      console.error("Error deleting content:", error);
+      alert("An error occurred while deleting");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Login Screen
   if (!isAuthenticated) {
     return (
@@ -427,8 +457,13 @@ export default function AdminPage() {
             content={content}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
+            onBulkDelete={handleBulkDelete}
           />
         </div>
+      )}
+
+      {activeTab === "settings" && (
+        <AdminSettings />
       )}
 
       {/* Edit Modal */}
