@@ -295,14 +295,13 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
 
         {/* Download Link */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5">Download Link *</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Download Link</label>
           <input
             type="url"
             name="downloadLink"
             value={formData.downloadLink}
             onChange={handleChange}
             placeholder="https://drive.google.com/..."
-            required
             className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
           />
         </div>
