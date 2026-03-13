@@ -14,17 +14,19 @@ import {
   Loader2
 } from "lucide-react";
 import Button from "./ui/Button";
+import VideoJSPlayer from "./VideoJSPlayer";
 
 interface VideoPlayerProps {
   src?: string;
   sources?: { quality: string; url: string }[];
   downloadLink?: string;
   title?: string;
+  useVideoJS?: boolean;
 }
 
 const QUALITIES = ["4K", "1080p", "720p", "480p"];
 
-export default function VideoPlayer({ src, sources, downloadLink, title }: VideoPlayerProps) {
+export default function VideoPlayer({ src, sources, downloadLink, title, useVideoJS = false }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -345,6 +347,15 @@ export default function VideoPlayer({ src, sources, downloadLink, title }: Video
           </a>
         )}
       </div>
+    );
+  }
+
+  if (useVideoJS && isDirectVideo(videoSrc)) {
+    return (
+      <VideoJSPlayer 
+        src={videoSrc} 
+        poster={undefined}
+      />
     );
   }
 
