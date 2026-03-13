@@ -20,54 +20,40 @@ export default function VideoJSPlayer({ src, poster, autoplay = false, onEnded }
   useEffect(() => {
     if (!videoRef.current) return;
 
-    if (!playerRef.current) {
-      const videoElement = document.createElement("video-js");
-      videoElement.classList.add("vjs-big-play-centered", "vjs-fluid");
-      videoRef.current.appendChild(videoElement);
+    const videoElement = document.createElement("video-js");
+    videoElement.classList.add("vjs-big-play-centered", "vjs-fluid");
+    videoRef.current.appendChild(videoElement);
 
-      const player = (playerRef.current = videojs(videoElement, {
-        controls: true,
-        autoplay: autoplay,
-        responsive: true,
-        fluid: true,
-        playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2],
-        sources: [{
-          src: src,
-          type: getVideoType(src)
-        }],
-        poster: poster,
-        html5: {
-          vhs: {
-            overrideNative: true
-          }
-        }
-      }, () => {
-        videojs.log("player is ready");
-      }));
+    const player = videojs(videoElement, {
+      controls: true,
+      autoplay: autoplay,
+      responsive: true,
+      fluid: true,
+      playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2],
+      sources: [{
+        src: src,
+        type: getVideoType(src)
+      }],
+      poster: poster,
+    }, () => {
+      playerRef.current = player as Player;
+    });
 
-      player.on("ended", () => {
-        if (onEnded) onEnded();
-      });
+    player.on("ended", () => {
+      if (onEnded) onEnded();
+    });
 
-      player.on("error", () => {
-        setError("Failed to load video");
-      });
-    } else {
-      const player = playerRef.current;
-      player.src({ src, type: getVideoType(src) });
-      if (poster) player.poster(poster);
-    }
-  }, [src, poster, autoplay, onEnded]);
+    player.on("error", () => {
+      setError("Failed to load video");
+    });
 
-  useEffect(() => {
-    const player = playerRef.current;
     return () => {
-      if (player && !player.isDisposed()) {
-        player.dispose();
+      if (playerRef.current) {
+        playerRef.current.dispose();
         playerRef.current = null;
       }
     };
-  }, []);
+  }, [src, poster, autoplay, onEnded]);
 
   const handleRetry = () => {
     setError(null);
