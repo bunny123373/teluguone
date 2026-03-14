@@ -100,7 +100,7 @@ export default function MovieDetailsPage() {
           
           {/* Prime Video Buttons */}
           <div className="flex flex-wrap gap-3">
-            <Link href={`/watch/${movie.slug || movie._id}`}>
+            <Link href={`/player/${movie.slug || movie._id}`}>
               <button className="flex items-center gap-2 px-6 md:px-8 py-2.5 bg-[#00a8e1] hover:bg-[#00b9f1] text-white font-semibold text-sm md:text-base rounded-sm transition-all">
                 <Play className="w-5 h-5 fill-white" />
                 Watch Now

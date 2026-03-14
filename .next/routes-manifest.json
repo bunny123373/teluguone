@@ -38,6 +38,14 @@
       "namedRegex": "^/movie/(?<nxtPid>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/player/[id]",
+      "regex": "^/player/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/player/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/series/watch/[id]",
       "regex": "^/series/watch/([^/]+?)(?:/)?$",
       "routeKeys": {

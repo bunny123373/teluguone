@@ -282,15 +282,16 @@ export default function UploadMovieForm({ onSubmit, isLoading }: UploadMovieForm
 
         {/* Watch Link */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5">Watch Link (MP4/M3U8)</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5">Watch Link (MP4 / M3U8 HLS Stream)</label>
           <input
             type="url"
             name="watchLink"
             value={formData.watchLink}
             onChange={handleChange}
-            placeholder="https://example.com/video.mp4"
+            placeholder="https://example.com/video.mp4 or https://example.com/stream.m3u8"
             className="w-full px-4 py-2.5 rounded-md bg-[#0d1117] border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#00a8e1]"
           />
+          <p className="text-xs text-gray-500 mt-1">Supports MP4, M3U8 (HLS), and direct video URLs</p>
         </div>
 
         {/* Download Link */}

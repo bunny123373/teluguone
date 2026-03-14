@@ -12,6 +12,7 @@
   "/disclaimer/page": "/disclaimer",
   "/movie/[id]/page": "/movie/[id]",
   "/page": "/",
+  "/player/[id]/page": "/player/[id]",
   "/privacy/page": "/privacy",
   "/seasonpass/page": "/seasonpass",
   "/series/[id]/page": "/series/[id]",

@@ -62,7 +62,7 @@ export default function WatchPartyPage() {
   }
 
   const watchUrl = content.type === "movie" 
-    ? `/watch/${content.slug || content._id}`
+    ? `/player/${content.slug || content._id}`
     : `/series/watch/${content.slug || content._id}`;
 
   return (

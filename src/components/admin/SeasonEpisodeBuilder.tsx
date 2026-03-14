@@ -192,7 +192,7 @@ export default function SeasonEpisodeBuilder({
                         </select>
                         <input
                           type="text"
-                          placeholder="Watch Link (MP4/M3U8)"
+                          placeholder="Watch Link (MP4 / M3U8 HLS)"
                           value={episode.watchLink}
                           onChange={(e) =>
                             handleEpisodeChange(

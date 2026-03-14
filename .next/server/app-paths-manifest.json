@@ -12,6 +12,7 @@
   "/disclaimer/page": "app/disclaimer/page.js",
   "/movie/[id]/page": "app/movie/[id]/page.js",
   "/page": "app/page.js",
+  "/player/[id]/page": "app/player/[id]/page.js",
   "/privacy/page": "app/privacy/page.js",
   "/seasonpass/page": "app/seasonpass/page.js",
   "/series/[id]/page": "app/series/[id]/page.js",
