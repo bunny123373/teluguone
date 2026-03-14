@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import "video.js/dist/video-js.css";
 import videojs from "video.js";
+import "@videojs/http-streaming";
 import type Player from "video.js/dist/types/player";
 
 interface VideoJSPlayerProps {
@@ -35,6 +36,11 @@ export default function VideoJSPlayer({ src, poster, autoplay = false, onEnded }
         type: getVideoType(src)
       }],
       poster: poster,
+      html5: {
+        vhs: {
+          overrideNative: true,
+        },
+      },
     }, () => {
       playerRef.current = player as Player;
     });
@@ -86,7 +92,7 @@ export default function VideoJSPlayer({ src, poster, autoplay = false, onEnded }
 function getVideoType(url: string): string {
   if (url.includes(".mp4")) return "video/mp4";
   if (url.includes(".webm")) return "video/webm";
-  if (url.includes(".m3u8")) return "application/x-mpegURL";
+  if (url.includes(".m3u8") || url.includes("m3u8")) return "application/x-mpegURL";
   if (url.includes(".ts")) return "video/MP2T";
   return "video/mp4";
 }
