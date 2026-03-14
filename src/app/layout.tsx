@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import "@vidstack/react/player/styles/default/theme.css";
+import "@vidstack/react/player/styles/default/layouts/video.css";
 import "./globals.css";
 import { Providers } from "./providers";
 import LoadingProvider from "@/components/LoadingProvider";
